@@ -1,0 +1,18 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: ng-three-gl-web
+  labels:
+    app: ng-three-gl
+spec:
+  template:
+    metadata:
+      labels:
+        app: ng-three-gl
+        tier: web
+    spec:
+      containers:
+      - name: ng-three-gl
+        image: gcr.io/ng-three-gl/ng-three-gl:v1
+        ports:
+        - containerPort: 80
