@@ -9,9 +9,9 @@ export class AppComponent implements OnInit {
     constructor (private dataProviderService: DataProviderService) {} // TODO: delete after data providers completed, only needed for data tests
 
     ngOnInit() {
-        let headers = new HttpHeaders({ ['X-Tenant-Id']: 'logus' });
-        let options = {headers: headers};
-        let url = 'https://presentation.idvp.net/checkin/file/checkin.json';
+        const headers = new HttpHeaders({ ['X-Tenant-Id']: 'logus' });
+        const options = {headers: headers};
+        const url = 'https://presentation.idvp.net/checkin/file/checkin.json';
         this.dataProviderService.getObservable(url, options).subscribe(p => this.data = p);
     }
 

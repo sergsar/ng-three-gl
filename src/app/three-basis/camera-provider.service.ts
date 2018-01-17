@@ -16,7 +16,6 @@ export class CameraProvider {
             perspectiveCamera = fn();
             this.perspectiveCameras.set(id, perspectiveCamera);
         }
-
         return perspectiveCamera;
     }
 }

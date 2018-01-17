@@ -41,67 +41,67 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
     }
 
     private async createComponent() {
-        let fontUrl = 'assets/fonts/helvetiker_regular.typeface.json';
-        let fontData = await this.dataProviderService.getAwait<string>(fontUrl);
-        let textureUrl = 'assets/textures/UV_Grid_Sm.jpg';
-        let texture = new Texture();
+        const fontUrl = 'assets/fonts/helvetiker_regular.typeface.json';
+        const fontData = await this.dataProviderService.getAwait<string>(fontUrl);
+        const textureUrl = 'assets/textures/UV_Grid_Sm.jpg';
+        const texture = new Texture();
         texture.image = await this.elementProviderService.getImage(textureUrl);
         texture.format = RGBFormat;
         texture.needsUpdate = true;
 
-        let group = this.object3d;
+        const group = this.object3d;
 
         function getBodyMaterial(color: any): Material { return new MeshLambertMaterial({color: color, map: texture}); }
-        let partsHeight = 0.1;
-        let cubePartsRoot = this.objects.filter(p => p.name === 'CubeParts')[0];
-        let cubeParts = cubePartsRoot.getObjects().filter(p => p.name === 'CubePart').sort(p => -Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value));
-        let ratesMaxValue = Number(cubeParts[cubeParts.length - 1].getItems().filter(p => p.key === 'Value')[0].value);
+        const partsHeight = 0.1;
+        const cubePartsRoot = this.objects.filter(p => p.name === 'CubeParts')[0];
+        const cubeParts = cubePartsRoot.getObjects().filter(p => p.name === 'CubePart').sort(p => -Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value));
+        const ratesMaxValue = Number(cubeParts[cubeParts.length - 1].getItems().filter(p => p.key === 'Value')[0].value);
         for (let i = 0; i < cubeParts.length; i++) {
-            let cubePart = cubeParts[i];
-            let color = new Color(cubePart.getItems().filter(p => p.key === 'Color')[0].value);
+            const cubePart = cubeParts[i];
+            const color = new Color(cubePart.getItems().filter(p => p.key === 'Color')[0].value);
             let element: Object3D;
             if (i === 0) {
-                let value = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
+                const value = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
                 element = new CubeFirstElement(value, partsHeight, getBodyMaterial(color)).getElement();
             } else {
-                let previousCubePart = cubeParts[i - 1];
-                let value = Math.sqrt(Number(previousCubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
-                let value2 = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
+                const previousCubePart = cubeParts[i - 1];
+                const value = Math.sqrt(Number(previousCubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
+                const value2 = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
                 element = new CubeSerialElement(value, value2, partsHeight, getBodyMaterial(color)).getElement();
             }
             group.add(element);
         }
 
-        let ratesThickness = 0.08;
-        let cubeRatesRoot = this.objects.filter(p => p.name === 'CubeRates')[0];
-        let cubeRates = cubeRatesRoot.getObjects().filter(p => p.name === 'CubeRate');
-        let ratesSum = cubeRates.map(function (p) { return Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value); }).reduce(function (p, p1) { return p + p1; }, 0);
+        const ratesThickness = 0.08;
+        const cubeRatesRoot = this.objects.filter(p => p.name === 'CubeRates')[0];
+        const cubeRates = cubeRatesRoot.getObjects().filter(p => p.name === 'CubeRate');
+        const ratesSum = cubeRates.map(function (p) { return Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value); }).reduce(function (p, p1) { return p + p1; }, 0);
         let widths = 0;
         cubeRates.forEach(rate => {
-            let value = Number(rate.getItems().filter(p => p.key === 'Value')[0].value);
-            let width = value / ratesSum;
-            let color = rate.getItems().filter(p => p.key === 'Color')[0].value;
-            let element = new Mesh(new BoxGeometry(width, ratesThickness, ratesThickness), getBodyMaterial(color));
+            const value = Number(rate.getItems().filter(p => p.key === 'Value')[0].value);
+            const width = value / ratesSum;
+            const color = rate.getItems().filter(p => p.key === 'Color')[0].value;
+            const element = new Mesh(new BoxGeometry(width, ratesThickness, ratesThickness), getBodyMaterial(color));
             element.translateOnAxis(new Vector3((width - 1) * 0.5 + widths, partsHeight + ratesThickness * 0.5, (ratesThickness - 1) * 0.5), 1);
             widths = widths + width;
             group.add(element);
         });
 
-        let ratesTitle = cubeRatesRoot.getItems().filter(p => p.key === 'Title')[0].value;
-        let leftRateValue = cubeRates[0].getItems().filter(p => p.key === 'Value')[0].value;
-        let rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
-        let textsMaterial = new MeshBasicMaterial({color: 'white'});
-        let ratesTitleSize = 0.04;
-        let ratesValueSize = 0.05;
-        let rateValuesGroup = new Group();
-        let ratesTitleGeometry = this.getTextGeometry(ratesTitle, fontData, ratesTitleSize, Anchor.LowerCenter);
-        let ratesTitleElement = new Mesh(ratesTitleGeometry, textsMaterial);
+        const ratesTitle = cubeRatesRoot.getItems().filter(p => p.key === 'Title')[0].value;
+        const leftRateValue = cubeRates[0].getItems().filter(p => p.key === 'Value')[0].value;
+        const rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
+        const textsMaterial = new MeshBasicMaterial({color: 'white'});
+        const ratesTitleSize = 0.04;
+        const ratesValueSize = 0.05;
+        const rateValuesGroup = new Group();
+        const ratesTitleGeometry = this.getTextGeometry(ratesTitle, fontData, ratesTitleSize, Anchor.LowerCenter);
+        const ratesTitleElement = new Mesh(ratesTitleGeometry, textsMaterial);
         ratesTitleElement.translateY(partsHeight + ratesThickness + ratesTitleSize * 0.5);
         rateValuesGroup.add(ratesTitleElement);
-        let leftRateValueGeometry = this.getTextGeometry(leftRateValue, fontData, ratesValueSize, Anchor.LowerLeft);
-        let leftRateValueElement = new Mesh(leftRateValueGeometry, textsMaterial);
-        let rightRateValueGeometry = this.getTextGeometry(rightRateValue, fontData, ratesValueSize, Anchor.LowerRight);
-        let rightRateValueElement = new Mesh(rightRateValueGeometry, textsMaterial);
+        const leftRateValueGeometry = this.getTextGeometry(leftRateValue, fontData, ratesValueSize, Anchor.LowerLeft);
+        const leftRateValueElement = new Mesh(leftRateValueGeometry, textsMaterial);
+        const rightRateValueGeometry = this.getTextGeometry(rightRateValue, fontData, ratesValueSize, Anchor.LowerRight);
+        const rightRateValueElement = new Mesh(rightRateValueGeometry, textsMaterial);
         leftRateValueElement.translateOnAxis(new Vector3(-0.45, partsHeight + ratesThickness + ratesValueSize * 0.2, 0), 1);
         rightRateValueElement.translateOnAxis(new Vector3(0.45, partsHeight + ratesThickness + ratesValueSize * 0.2, 0), 1);
         rateValuesGroup.add(rightRateValueElement);
@@ -111,15 +111,15 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
     }
 
     private getTextGeometry(text: string, fontData: string, size: number, anchor: Anchor = Anchor.MiddleCenter): BufferGeometry {
-        let font = new Font(fontData);
-        let shapes = font.generateShapes(text, size, 1);
-        let shapeGeometry = new ShapeGeometry(shapes);
+        const font = new Font(fontData);
+        const shapes = font.generateShapes(text, size, 1);
+        const shapeGeometry = new ShapeGeometry(shapes);
         shapeGeometry.computeBoundingBox();
-        let vector2 = anchorToVector2(anchor);
-        let xMid = -0.5 * (vector2.x + 1) * (shapeGeometry.boundingBox.max.x - shapeGeometry.boundingBox.min.x);
-        let yMid = -0.5 * (vector2.y + 1) * (shapeGeometry.boundingBox.max.y - shapeGeometry.boundingBox.min.y);
+        const vector2 = anchorToVector2(anchor);
+        const xMid = -0.5 * (vector2.x + 1) * (shapeGeometry.boundingBox.max.x - shapeGeometry.boundingBox.min.x);
+        const yMid = -0.5 * (vector2.y + 1) * (shapeGeometry.boundingBox.max.y - shapeGeometry.boundingBox.min.y);
         shapeGeometry.translate(xMid, yMid, 0);
-        let bufferGeometry = new BufferGeometry();
+        const bufferGeometry = new BufferGeometry();
         bufferGeometry.fromGeometry(shapeGeometry);
         return bufferGeometry;
     }

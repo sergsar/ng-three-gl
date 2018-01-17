@@ -8,12 +8,12 @@ export  class RendererProvider {
 
     public getRenderer(parameters?: WebGLRendererParameters, id?: string): WebGLRenderer {
         let renderer = this.renderers.get(id);
-        if (!parameters) {
+        if (parameters === null) {
           parameters = this.parameters.get(id);
         } else {
           this.parameters.set(id, parameters);
         }
-        if (!parameters) {
+        if (parameters === null) {
           throw new Error('null parameters');
         }
         if (renderer == null) {

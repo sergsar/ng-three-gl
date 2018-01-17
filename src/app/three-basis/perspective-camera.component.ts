@@ -8,7 +8,7 @@ export class PerspectiveCameraComponent {
     public perspectiveCamera: PerspectiveCamera;
 
     constructor(private cameraProvider: CameraProvider) {
-        let perspectiveCameraSetupFn = () => new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const perspectiveCameraSetupFn = () => new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.perspectiveCamera = this.cameraProvider.getPerspectiveCamera(perspectiveCameraSetupFn);
         this.perspectiveCamera.position.z = 5;
     }
