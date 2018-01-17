@@ -1,0 +1,80 @@
+<div>
+  <canvas></canvas>
+    <three-area *ngIf="getData()">
+    <!--<three-area >-->
+      <renderer>
+        <scene>
+            <perspective-camera>
+                <camera-orbit-control></camera-orbit-control>
+            </perspective-camera>
+
+            <!--<group-3d>-->
+                <!--<box-control id="{{getData()['Guest']['LastName']}}"></box-control>-->
+            <!--</group-3d>-->
+
+            <!--<box-control ></box-control>-->
+            <cube-control>
+                <bind-item key="Title" value="рабочее время"></bind-item>
+                <bind-object name="Transform">
+                    <bind-object name="Position">
+                        <bind-item key="X" value="0"></bind-item>
+                        <bind-item key="Y" value="0"></bind-item>
+                        <bind-item key="Z" value="0"></bind-item>
+                    </bind-object>
+                    <bind-object name="Size">
+                        <bind-item key="X" value="1"></bind-item>
+                        <bind-item key="Y" value="0.15"></bind-item>
+                        <bind-item key="Z" value="1"></bind-item>
+                    </bind-object>
+                </bind-object>
+                <bind-object name="CubeParts">
+                    <bind-item key="Title" value="часы"></bind-item>
+                    <bind-object name="CubePart">
+                        <bind-item key="Title" value="ПРИЕМ ПО САМОЗАПИСИ"></bind-item>
+                        <bind-item key="Name" value="Прием по самозаписи"></bind-item>
+                        <bind-item key="Value" value="3364"></bind-item>
+                        <bind-item key="Color" value="green"></bind-item>
+                    </bind-object>
+                    <bind-object name="CubePart">
+                        <bind-item key="Title" value="ПРИЕМ ПАЦИЕНТОВ"></bind-item>
+                        <bind-item key="Name" value="Прием пациентов"></bind-item>
+                        <bind-item key="Value" value="4674"></bind-item>
+                        <bind-item key="Color" value="orange"></bind-item>
+                    </bind-object>
+                    <bind-object name="CubePart">
+                        <bind-item key="Title" value="РАБОЧЕЕ ВРЕМЯ"></bind-item>
+                        <bind-item key="Name" value="Рабочее время"></bind-item>
+                        <bind-item key="Value" value="6460"></bind-item>
+                        <bind-item key="Color" value="blue"></bind-item>
+                    </bind-object>
+                    <bind-object name="CubePart">
+                        <bind-item key="Title" value="ВЗВЕШЕННЫЙ НОРМАТИВ"></bind-item>
+                        <bind-item key="Name" value="Взвешенный норматив"></bind-item>
+                        <bind-item key="Value" value="7979"></bind-item>
+                        <bind-item key="Color" value="brown"></bind-item>
+                    </bind-object>
+                </bind-object>
+                <bind-object name="CubeRates">
+                    <bind-item key="Title" value="in rates equivalent"></bind-item>
+                    <bind-object name="CubeRate">
+                        <bind-item key="Title" value="ВЫДЕЛЕНО"></bind-item>
+                        <bind-item key="Color" value="blue"></bind-item>
+                        <bind-item key="Percent" value="81"></bind-item>
+                        <bind-item key="PercentText" value="81%"></bind-item>
+                        <bind-item key="Value" value="46"></bind-item>
+                    </bind-object>
+                    <bind-object name="CubeRate">
+                        <bind-item key="Title" value="ДЕФИЦИТ"></bind-item>
+                        <bind-item key="Color" value="red"></bind-item>
+                        <bind-item key="Percent" value="19"></bind-item>
+                        <bind-item key="PercentText" value="19%"></bind-item>
+                        <bind-item key="Value" value="10.7"></bind-item>
+                    </bind-object>
+                </bind-object>
+            </cube-control>
+            <hemisphere-light></hemisphere-light>
+            <direct-light></direct-light>
+        </scene>
+      </renderer>
+    </three-area>
+</div>
