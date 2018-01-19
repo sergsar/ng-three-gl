@@ -4,7 +4,7 @@ import {Inject, Injectable} from '@angular/core';
 export class CanvasProvider {
   private canvas: any;
 
-  constructor(@Inject(Object) canvas: any) {
+  constructor(@Inject(Object) canvas: Object) {
     this.canvas = canvas;
   }
 

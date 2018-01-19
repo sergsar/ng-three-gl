@@ -87,27 +87,61 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
             group.add(element);
         });
 
+        const cubeTitle = this.items.filter(p => p.key === 'Title')[0].value;
         const ratesTitle = cubeRatesRoot.getItems().filter(p => p.key === 'Title')[0].value;
         const leftRateValue = cubeRates[0].getItems().filter(p => p.key === 'Value')[0].value;
         const rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
+        const leftPercentValue = cubeRates[0].getItems().filter(p => p.key === 'Percent')[0].value;
+        const rightPercentValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Percent')[0].value;
         const textsMaterial = new MeshBasicMaterial({color: 'white'});
+        const leftText = cubeRates[0].getItems().filter(p => p.key === 'Title')[0].value;
+        const rightText = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Title')[0].value;
         const ratesTitleSize = 0.04;
         const ratesValueSize = 0.05;
+        const percentValueSize = 0.12;
+        const ratTextsSize = 0.05;
+        const cubeTitleSize = 0.065;
         const rateValuesGroup = new Group();
         const ratesTitleGeometry = this.getTextGeometry(ratesTitle, fontData, ratesTitleSize, Anchor.LowerCenter);
         const ratesTitleElement = new Mesh(ratesTitleGeometry, textsMaterial);
-        ratesTitleElement.translateY(partsHeight + ratesThickness + ratesTitleSize * 0.5);
+        let elevation = partsHeight + ratesThickness;
+        ratesTitleElement.translateY(elevation + ratesTitleSize * 0.5);
         rateValuesGroup.add(ratesTitleElement);
         const leftRateValueGeometry = this.getTextGeometry(leftRateValue, fontData, ratesValueSize, Anchor.LowerLeft);
         const leftRateValueElement = new Mesh(leftRateValueGeometry, textsMaterial);
         const rightRateValueGeometry = this.getTextGeometry(rightRateValue, fontData, ratesValueSize, Anchor.LowerRight);
         const rightRateValueElement = new Mesh(rightRateValueGeometry, textsMaterial);
-        leftRateValueElement.translateOnAxis(new Vector3(-0.45, partsHeight + ratesThickness + ratesValueSize * 0.2, 0), 1);
-        rightRateValueElement.translateOnAxis(new Vector3(0.45, partsHeight + ratesThickness + ratesValueSize * 0.2, 0), 1);
+        elevation += ratesValueSize * 0.2;
+        leftRateValueElement.translateOnAxis(new Vector3(-0.45, elevation, 0), 1);
+        rightRateValueElement.translateOnAxis(new Vector3(0.45, elevation, 0), 1);
         rateValuesGroup.add(rightRateValueElement);
         rateValuesGroup.add(leftRateValueElement);
+        const leftPercentGeometry = this.getTextGeometry(leftPercentValue + ' %', fontData, percentValueSize, Anchor.LowerCenter);
+        const rightPercentGeometry = this.getTextGeometry(rightPercentValue + ' %', fontData, percentValueSize, Anchor.LowerCenter);
+        const leftPercentElement = new Mesh(leftPercentGeometry, textsMaterial);
+        const rightPercentElement = new Mesh(rightPercentGeometry, textsMaterial);
+        elevation += percentValueSize * 0.8;
+        leftPercentElement.translateOnAxis(new Vector3(-0.25, elevation, 0), 1);
+        rightPercentElement.translateOnAxis(new Vector3(0.25, elevation, 0), 1);
+        rateValuesGroup.add(leftPercentElement);
+        rateValuesGroup.add(rightPercentElement);
+        const leftTextGeometry = this.getTextGeometry(leftText, fontData, ratTextsSize, Anchor.LowerCenter);
+        const rightTextGeometry = this.getTextGeometry(rightText, fontData, ratTextsSize, Anchor.LowerCenter);
+        const leftTextElement = new Mesh(leftTextGeometry, textsMaterial);
+        const rightTextElement = new Mesh(rightTextGeometry, textsMaterial);
+        elevation += ratTextsSize * 4;
+        leftTextElement.translateOnAxis(new Vector3(-0.25, elevation, 0), 1);
+        rightTextElement.translateOnAxis(new Vector3(0.25, elevation, 0), 1);
+        rateValuesGroup.add(leftTextElement);
+        rateValuesGroup.add(rightTextElement);
+        const cubeTitleGeometry = this.getTextGeometry(cubeTitle, fontData, cubeTitleSize, Anchor.LowerCenter);
+        const cubeTitleElement = new Mesh(cubeTitleGeometry, textsMaterial);
+        elevation += cubeTitleSize * 1.5;
+        cubeTitleElement.translateY(elevation);
+        rateValuesGroup.add(cubeTitleElement);
         rateValuesGroup.translateZ(-0.5);
         group.add(rateValuesGroup);
+
     }
 
     private getTextGeometry(text: string, fontData: string, size: number, anchor: Anchor = Anchor.MiddleCenter): BufferGeometry {
