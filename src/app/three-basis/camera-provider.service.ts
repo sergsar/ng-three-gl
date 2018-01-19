@@ -1,21 +1,16 @@
 import {Injectable} from '@angular/core';
-import {PerspectiveCamera} from 'three';
+import {Camera} from 'three';
 
 @Injectable()
 export class CameraProvider {
-    private perspectiveCameras: Map<string, PerspectiveCamera> = new Map();
+    private cameras: Map<string, Camera> = new Map();
 
-    public getPerspectiveCamera(fn?: () => PerspectiveCamera, id?: string): PerspectiveCamera {
-        if (fn == null) {
-            fn = () => new PerspectiveCamera();
-        }
+    public getCamera(id?: string): Camera {
+        return this.cameras.get(id);
+    }
 
-        let perspectiveCamera = this.perspectiveCameras.get(id);
-
-        if (perspectiveCamera == null) {
-            perspectiveCamera = fn();
-            this.perspectiveCameras.set(id, perspectiveCamera);
-        }
-        return perspectiveCamera;
+    public setCamera(camera: Camera, id?: string): Camera {
+      this.cameras.set(id, camera);
+      return camera;
     }
 }

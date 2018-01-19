@@ -6,7 +6,7 @@ import {Object3dComponent} from './object3d.component';
 
 @Component({
     selector: 'scene',
-    templateUrl: './scene.component.html',
+    template: '<ng-content></ng-content>',
     providers: [{ provide: Object3dComponent, useExisting: forwardRef(() => SceneComponent) }]
 })
 export class SceneComponent extends Object3dComponent {

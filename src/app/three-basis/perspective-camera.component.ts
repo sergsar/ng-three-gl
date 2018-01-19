@@ -1,15 +1,17 @@
 import {Component} from '@angular/core';
-import {PerspectiveCamera} from 'three';
+import {Camera, PerspectiveCamera} from 'three';
 import {CameraProvider} from './camera-provider.service';
+import {RendererProvider} from './renderer-provider.service';
 
 @Component({selector: 'perspective-camera', template: '<ng-content></ng-content>'})
 export class PerspectiveCameraComponent {
 
-    public perspectiveCamera: PerspectiveCamera;
-
-    constructor(private cameraProvider: CameraProvider) {
-        const perspectiveCameraSetupFn = () => new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        this.perspectiveCamera = this.cameraProvider.getPerspectiveCamera(perspectiveCameraSetupFn);
-        this.perspectiveCamera.position.z = 5;
+    constructor(cameraProvider: CameraProvider, rendererProvider: RendererProvider) {
+        const renderer = rendererProvider.getRenderer();
+        const rendererSize = renderer.getSize();
+        const aspect = rendererSize.width / rendererSize.height;
+        const perspectiveCamera = new PerspectiveCamera(75, aspect, 0.1, 1000);
+        perspectiveCamera.position.z = 2;
+        cameraProvider.setCamera(perspectiveCamera);
     }
 }

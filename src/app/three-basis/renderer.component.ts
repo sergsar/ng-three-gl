@@ -1,35 +1,66 @@
-import {Component, Input, AfterContentInit, ViewChild, ContentChild } from '@angular/core';
-import {WebGLRenderer} from 'three';
+import {Component, Input, ContentChild, OnInit} from '@angular/core';
+import {PerspectiveCamera, WebGLRenderer} from 'three';
 import {SceneComponent} from './scene.component';
 import {RendererProvider} from './renderer-provider.service';
+import {CanvasProvider} from './canvas-provider.service';
+import {SceneProvider} from './scene-provider.service';
+import {CameraProvider} from './camera-provider.service';
 import {AnimateProvider} from './animate-provider.service';
 
-@Component({ selector: 'renderer', templateUrl: './renderer.component.html' })
-export class  RendererComponent implements AfterContentInit {
-    private renderer: WebGLRenderer;
+@Component({ selector: 'renderer', template: '<ng-content></ng-content>' })
+export class  RendererComponent implements OnInit {
+
+    // in future render can be smaller than canvas
+    @Input()
+    private height = 100;
 
     @Input()
-    private height = 500;
-
-    @Input()
-    private width = 800;
-
-    @ViewChild('canvas')
-    private canvas: any;
+    private width = 100;
 
     @ContentChild(SceneComponent)
     sceneComponent: SceneComponent;
 
-    constructor(private animateProvider: AnimateProvider, private rendererProvider: RendererProvider) {}
+    private context: CanvasRenderingContext2D;
+    private renderer: WebGLRenderer;
 
-    public ngAfterContentInit() {
-        this.renderer = this.rendererProvider.getRenderer({ canvas: this.canvas.nativeElement });
-        this.renderer.setSize(this.width, this.height);
+    constructor(rendererProvider: RendererProvider,
+                canvasProvider: CanvasProvider,
+                private sceneProvider: SceneProvider,
+                private cameraProvider: CameraProvider,
+                private animateProvider: AnimateProvider) {
+      const canvas = canvasProvider.getCanvas();
+      const canvasWidth = canvas.width;
+      const canvasHeight = canvas.height;
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      this.renderer = rendererProvider.setRenderer(new WebGLRenderer({ antialias: true }));
+      this.renderer.setSize( screenWidth, screenHeight );
 
-        const scene = this.sceneComponent.scene;
-        const perspectiveCamera = this.sceneComponent.perspectiveCameraComponent.perspectiveCamera;
+      this.context = canvas.getContext('2d');
+    }
 
-        const animateTask = () => this.renderer.render(scene, perspectiveCamera);
+    public ngOnInit() {
+        const scene = this.sceneProvider.getScene();
+        const camera = this.cameraProvider.getCamera();
+
+        const animateTask = () => {
+          this.renderer.render(scene, camera);
+          this.context.drawImage(this.renderer.domElement, 0, 0);
+        }
         this.animateProvider.setFrameTask(this, animateTask);
+
+        // window.removeEventListener('resize', this.onWindowResize);
+        window.addEventListener( 'resize', () => this.onWindowResize(), false );
+    }
+
+    private onWindowResize() {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      this.renderer.setSize(screenWidth, screenHeight);
+      const camera = this.cameraProvider.getCamera();
+      if (camera instanceof PerspectiveCamera) {
+        camera.aspect = screenWidth / screenHeight;
+        camera.updateProjectionMatrix();
+      }
     }
 }

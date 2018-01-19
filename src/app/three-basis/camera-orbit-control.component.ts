@@ -8,10 +8,9 @@ const OrbitControls = require('three-orbit-controls')(THREE);
 @Component({selector: 'camera-orbit-control', template: ''})
 export class CameraOrbitControlComponent {
 
-    constructor(private cameraProvider: CameraProvider) {
-        const perspectiveCamera = this.cameraProvider.getPerspectiveCamera();
-        const controls = new OrbitControls(perspectiveCamera);
-        controls.addEventListener('change', () => {});
+    constructor(cameraProvider: CameraProvider) {
+      const perspectiveCamera = cameraProvider.getCamera();
+      const controls = new OrbitControls(perspectiveCamera);
+      controls.addEventListener('change', () => {});
     }
-
 }
