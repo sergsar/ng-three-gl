@@ -2,8 +2,8 @@ import {Component, forwardRef, ContentChildren, QueryList, AfterContentInit} fro
 import {Object3dComponent} from '../../three-basis/object3d.component';
 import {CubeFirstElement} from './cube-first-element';
 import {
-    BoxGeometry, Color, Group, MeshLambertMaterial, Mesh, Object3D, Vector3, Material, Font, BufferGeometry,
-    ShapeGeometry, MeshBasicMaterial, Texture, RGBFormat
+  BoxGeometry, Color, Group, MeshLambertMaterial, Mesh, Object3D, Vector3, Material, Font, BufferGeometry,
+  ShapeGeometry, MeshBasicMaterial, Texture, RGBFormat, RepeatWrapping, PlaneGeometry
 } from 'three';
 import {CubeSerialElement} from './cube-serial-element';
 import {BindObjectComponent} from '../../components-elementary/bind-object.component';
@@ -12,6 +12,7 @@ import {Anchor} from '../../three-basis/anchor';
 import {anchorToVector2} from '../../three-basis/anchor-to-vector2';
 import {ElementProviderService} from '../../three-basis/element-provider.service';
 import {BindItemComponent} from '../../components-elementary/bind-item.component';
+import {UvMapProjector} from '../../three-basis/uv-map-projector';
 
 @Component({
     selector: 'cube-control',
@@ -43,11 +44,16 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
     private async createComponent() {
         const fontUrl = 'assets/fonts/helvetiker_regular.typeface.json';
         const fontData = await this.dataProviderService.getAwait<string>(fontUrl);
-        const textureUrl = 'assets/textures/UV_Grid_Sm.jpg';
+        const textsMaterial = new MeshBasicMaterial({color: 'white'});
+        const textureUrl = 'assets/textures/KUB.JPG';
         const texture = new Texture();
         texture.image = await this.elementProviderService.getImage(textureUrl);
         texture.format = RGBFormat;
+        texture.wrapS = RepeatWrapping;
+        texture.wrapT = RepeatWrapping;
         texture.needsUpdate = true;
+
+        const uvMapProjector = new UvMapProjector();
 
         const group = this.object3d;
 
@@ -56,19 +62,44 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
         const cubePartsRoot = this.objects.filter(p => p.name === 'CubeParts')[0];
         const cubeParts = cubePartsRoot.getObjects().filter(p => p.name === 'CubePart').sort(p => -Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value));
         const ratesMaxValue = Number(cubeParts[cubeParts.length - 1].getItems().filter(p => p.key === 'Value')[0].value);
-        for (let i = 0; i < cubeParts.length; i++) {
+        const cubePartsCount = cubeParts.length;
+        for (let i = 0; i < cubePartsCount; i++) {
             const cubePart = cubeParts[i];
             const color = new Color(cubePart.getItems().filter(p => p.key === 'Color')[0].value);
             let element: Object3D;
+            let value = 0;
             if (i === 0) {
-                const value = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
+                value = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
                 element = new CubeFirstElement(value, partsHeight, getBodyMaterial(color)).getElement();
             } else {
                 const previousCubePart = cubeParts[i - 1];
-                const value = Math.sqrt(Number(previousCubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
+                value = Math.sqrt(Number(previousCubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
                 const value2 = Math.sqrt(Number(cubePart.getItems().filter(p => p.key === 'Value')[0].value) / ratesMaxValue);
                 element = new CubeSerialElement(value, value2, partsHeight, getBodyMaterial(color)).getElement();
             }
+            const plankSize = 0.035;
+            const plankGroup = new Group();
+            const plankText = cubePart.getItems().filter(p => p.key === 'Title')[0].value;
+            const plankTextShift = -0.3;
+            const plankValueShift = -0.15;
+            const plankZ = -0.5 + (0.7 + i) / cubePartsCount;
+            const plankTextGeometry = this.getTextGeometry(plankText, fontData, plankSize, Anchor.LowerRight);
+            const plankTextElement = new Mesh(plankTextGeometry, textsMaterial);
+            plankTextElement.translateX(plankTextShift);
+            plankGroup.add(plankTextElement);
+            const plankValue = cubePart.getItems().filter(p => p.key === 'Value')[0].value;
+            const plankValueGeometry = this.getTextGeometry(plankValue, fontData, plankSize, Anchor.LowerCenter);
+            const plankValueElement = new Mesh(plankValueGeometry, textsMaterial);
+            plankValueElement.translateX(plankValueShift);
+            plankGroup.add(plankValueElement);
+            const plankValueBackGeometry = new PlaneGeometry(0.2, plankSize * 1.7);
+            uvMapProjector.box(plankValueBackGeometry);
+            const plankValueBackElement = new Mesh(plankValueBackGeometry, getBodyMaterial(color));
+            plankValueBackElement.translateOnAxis(new Vector3(plankValueShift, 0.02, - 0.01), 1);
+            plankGroup.add(plankValueBackElement);
+            plankGroup.translateOnAxis(new Vector3(-0.5, 0.05, plankZ), 1);
+            plankGroup.rotateX(-1);
+            group.add(plankGroup);
             group.add(element);
         }
 
@@ -81,8 +112,10 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
             const value = Number(rate.getItems().filter(p => p.key === 'Value')[0].value);
             const width = value / ratesSum;
             const color = rate.getItems().filter(p => p.key === 'Color')[0].value;
-            const element = new Mesh(new BoxGeometry(width, ratesThickness, ratesThickness), getBodyMaterial(color));
+            const geometry = new BoxGeometry(width, ratesThickness, ratesThickness);
+            const element = new Mesh(geometry, getBodyMaterial(color));
             element.translateOnAxis(new Vector3((width - 1) * 0.5 + widths, partsHeight + ratesThickness * 0.5, (ratesThickness - 1) * 0.5), 1);
+            uvMapProjector.box(geometry);
             widths = widths + width;
             group.add(element);
         });
@@ -93,9 +126,10 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
         const rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
         const leftPercentValue = cubeRates[0].getItems().filter(p => p.key === 'Percent')[0].value;
         const rightPercentValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Percent')[0].value;
-        const textsMaterial = new MeshBasicMaterial({color: 'white'});
         const leftText = cubeRates[0].getItems().filter(p => p.key === 'Title')[0].value;
         const rightText = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Title')[0].value;
+        const leftRateColor = cubeRates[0].getItems().filter(p => p.key === 'Color')[0].value;
+        const rightRateColor = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Color')[0].value;
         const ratesTitleSize = 0.04;
         const ratesValueSize = 0.05;
         const percentValueSize = 0.12;
@@ -134,6 +168,15 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
         rightTextElement.translateOnAxis(new Vector3(0.25, elevation, 0), 1);
         rateValuesGroup.add(leftTextElement);
         rateValuesGroup.add(rightTextElement);
+        const leftTextBackGeometry = new PlaneGeometry(0.4, ratTextsSize * 1.7);
+        uvMapProjector.box(leftTextBackGeometry);
+        const rightTextBackGeometry = leftTextBackGeometry.clone();
+        const leftTextBackElement = new Mesh(leftTextBackGeometry, getBodyMaterial(leftRateColor));
+        const rightTextBackElement = new Mesh(leftTextBackGeometry, getBodyMaterial(rightRateColor));
+        leftTextBackElement.translateOnAxis(new Vector3(-0.25, elevation + 0.025, -0.005), 1);
+        rightTextBackElement.translateOnAxis(new Vector3(0.25, elevation + 0.025, -0.005), 1);
+        rateValuesGroup.add(leftTextBackElement);
+        rateValuesGroup.add(rightTextBackElement);
         const cubeTitleGeometry = this.getTextGeometry(cubeTitle, fontData, cubeTitleSize, Anchor.LowerCenter);
         const cubeTitleElement = new Mesh(cubeTitleGeometry, textsMaterial);
         elevation += cubeTitleSize * 1.5;

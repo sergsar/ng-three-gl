@@ -49,7 +49,6 @@ export class  RendererComponent implements OnInit {
         }
         this.animateProvider.setFrameTask(this, animateTask);
 
-        // window.removeEventListener('resize', this.onWindowResize);
         window.addEventListener( 'resize', () => this.onWindowResize(), false );
     }
 

@@ -25,7 +25,6 @@ export class ThreeAreaComponent{
     this.canvas.width = screenWidth * this.width / 100;
     this.canvas.height = screenHeight * this.height / 100;
 
-    // window.removeEventListener('resize', this.onWindowResize);
     window.addEventListener( 'resize', () => this.onWindowResize() , false );
   }
 
