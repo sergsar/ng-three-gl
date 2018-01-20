@@ -11,7 +11,6 @@ import {CameraProvider} from './camera-provider.service';
 import {SceneProvider} from './scene-provider.service';
 import {CameraOrbitControlComponent} from './camera-orbit-control.component';
 import {AnimateProvider} from './animate-provider.service';
-import {BoxControlComponent} from './box-control.component';
 import {Object3dComponent} from './object3d.component';
 
 @NgModule({
@@ -24,7 +23,6 @@ import {Object3dComponent} from './object3d.component';
         SceneComponent,
         PerspectiveCameraComponent,
         CameraOrbitControlComponent,
-        BoxControlComponent,
         Object3dComponent
     ],
     exports: [
@@ -35,7 +33,6 @@ import {Object3dComponent} from './object3d.component';
         SceneComponent,
         PerspectiveCameraComponent,
         CameraOrbitControlComponent,
-        BoxControlComponent,
         Object3dComponent
     ],
     providers: [
