@@ -1,0 +1,51 @@
+{
+	"Title": "workload time",
+    "CubeParts": {
+		"Title": "time",
+		"Parts": [
+			{
+				"Title": "REGISTERED",
+				"Name": "registered",
+				"Value": "3364",
+				"Color": "green"
+			},
+			{
+				"Title": "ACTUAL",
+				"Name": "actual",
+				"Value": "4674",
+				"Color": "orange"
+			},
+			{
+				"Title": "FULL",
+				"Name": "full",
+				"Value": "6460",
+				"Color": "blue"
+			},
+			{
+				"Title": "AVERAGE",
+				"Name": "average",
+				"Value": "7979",
+				"Color": "brown"
+			}
+		]
+    },
+    "CubeRates": {
+		"Title": "in rates equivalent",
+		"Rates": [
+			{
+				"Title": "GRANTED",
+				"Color": "blue",
+				"Percent": "81",
+				"PercentText": "81%",
+				"Value": "46"
+			},
+			{
+				"Title": "ABSENCE",
+				"Color": "red",
+				"Percent": "19",
+				"PercentText": "19%",
+				"Value": "10.7"
+			}
+		]
+    }
+}

@@ -8,7 +8,7 @@ import {canvasProviderFactory} from './canvas-provider-factory';
   template: `<ng-content></ng-content>`,
   providers: [{ provide: CanvasProvider, deps: [ElementRef], useFactory: canvasProviderFactory }]
 })
-export class ThreeAreaComponent{
+export class ThreeAreaComponent {
 
   @Input()
   private height = 100;

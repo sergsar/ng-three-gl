@@ -1,6 +1,5 @@
-<div>
+<div *ngIf="getData()">
   <canvas>
-    <!--<three-area *ngIf="getData()">-->
     <three-area >
       <renderer>
         <scene>
@@ -11,10 +10,8 @@
             <!--<group-3d>-->
                 <!--<box-control id="{{getData()['Guest']['LastName']}}"></box-control>-->
             <!--</group-3d>-->
-
-            <!--<box-control ></box-control>-->
             <cube-control>
-                <bind-item key="Title" value="current situation"></bind-item>
+                <bind-item key="Title" value="{{getData()['Title']}}"></bind-item>
                 <bind-object name="Transform">
                     <bind-object name="Position">
                         <bind-item key="X" value="0"></bind-item>
@@ -28,47 +25,22 @@
                     </bind-object>
                 </bind-object>
                 <bind-object name="CubeParts">
-                    <bind-item key="Title" value="time"></bind-item>
-                    <bind-object name="CubePart">
-                        <bind-item key="Title" value="REGISTERED"></bind-item>
-                        <bind-item key="Name" value="registered"></bind-item>
-                        <bind-item key="Value" value="3364"></bind-item>
-                        <bind-item key="Color" value="green"></bind-item>
-                    </bind-object>
-                    <bind-object name="CubePart">
-                        <bind-item key="Title" value="ACTUAL"></bind-item>
-                        <bind-item key="Name" value="actual"></bind-item>
-                        <bind-item key="Value" value="4674"></bind-item>
-                        <bind-item key="Color" value="orange"></bind-item>
-                    </bind-object>
-                    <bind-object name="CubePart">
-                        <bind-item key="Title" value="FULL"></bind-item>
-                        <bind-item key="Name" value="full"></bind-item>
-                        <bind-item key="Value" value="6460"></bind-item>
-                        <bind-item key="Color" value="blue"></bind-item>
-                    </bind-object>
-                    <bind-object name="CubePart">
-                        <bind-item key="Title" value="AVERAGE"></bind-item>
-                        <bind-item key="Name" value="average"></bind-item>
-                        <bind-item key="Value" value="7979"></bind-item>
-                        <bind-item key="Color" value="brown"></bind-item>
+                    <bind-item key="Title" value="{{getData()['CubeParts']['Title']}}"></bind-item>
+                    <bind-object *ngFor="let cubePart of getData()['CubeParts']['Parts']" name="CubePart">
+                      <bind-item key="Title" value="{{cubePart['Title']}}"></bind-item>
+                      <bind-item key="Name" value="{{cubePart['Name']}}"></bind-item>
+                      <bind-item key="Value" value="{{cubePart['Value']}}"></bind-item>
+                      <bind-item key="Color" value="{{cubePart['Color']}}"></bind-item>
                     </bind-object>
                 </bind-object>
                 <bind-object name="CubeRates">
-                    <bind-item key="Title" value="in rates equivalent"></bind-item>
-                    <bind-object name="CubeRate">
-                        <bind-item key="Title" value="GRANTED"></bind-item>
-                        <bind-item key="Color" value="blue"></bind-item>
-                        <bind-item key="Percent" value="81"></bind-item>
-                        <bind-item key="PercentText" value="81%"></bind-item>
-                        <bind-item key="Value" value="46"></bind-item>
-                    </bind-object>
-                    <bind-object name="CubeRate">
-                        <bind-item key="Title" value="ABSENCE"></bind-item>
-                        <bind-item key="Color" value="red"></bind-item>
-                        <bind-item key="Percent" value="19"></bind-item>
-                        <bind-item key="PercentText" value="19%"></bind-item>
-                        <bind-item key="Value" value="10.7"></bind-item>
+                    <bind-item key="Title" value="{{getData()['CubeRates']['Title']}}"></bind-item>
+                    <bind-object *ngFor="let cubeRate of getData()['CubeRates']['Rates']" name="CubeRate">
+                      <bind-item key="Title" value="{{cubeRate['Title']}}"></bind-item>
+                      <bind-item key="Color" value="{{cubeRate['Color']}}"></bind-item>
+                      <bind-item key="Percent" value="{{cubeRate['Percent']}}"></bind-item>
+                      <bind-item key="PercentText" value="{{cubeRate['PercentText']}}"></bind-item>
+                      <bind-item key="Value" value="{{cubeRate['Value']}}"></bind-item>
                     </bind-object>
                 </bind-object>
             </cube-control>
