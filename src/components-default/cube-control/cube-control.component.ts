@@ -7,7 +7,7 @@ import {
 } from 'three';
 import {CubeSerialElement} from './cube-serial-element';
 import {BindObjectComponent} from '../../components-elementary/bind-object.component';
-import {DataProviderService} from '../../data.provider.service';
+import {DataProviderService} from '../../app/data.provider.service';
 import {Anchor} from '../../three-basis/anchor';
 import {anchorToVector2} from '../../three-basis/anchor-to-vector2';
 import {ElementProviderService} from '../../three-basis/element-provider.service';

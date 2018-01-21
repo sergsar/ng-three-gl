@@ -7,4 +7,4 @@ import {CubeControlComponent} from './cube-control/cube-control.component';
     exports: [CubeControlComponent]
 })
 
-export class ComponentsModule {}
+export class ComponentsDefaultModule {}
