@@ -1,10 +1,10 @@
-import {Inject, Injectable} from '@angular/core';
+import {ElementRef, Inject, Injectable} from '@angular/core';
 
 @Injectable()
 export class CanvasProvider {
   private canvas: HTMLCanvasElement;
 
-  constructor(@Inject(HTMLCanvasElement) canvas: HTMLCanvasElement) {
+  constructor(@Inject(ElementRef) canvas: HTMLCanvasElement) {
     this.canvas = canvas;
   }
 
