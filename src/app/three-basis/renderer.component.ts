@@ -22,21 +22,19 @@ export class  RendererComponent implements OnInit {
 
     private context: CanvasRenderingContext2D;
     private renderer: WebGLRenderer;
+    private canvas: HTMLCanvasElement;
 
     constructor(rendererProvider: RendererProvider,
                 canvasProvider: CanvasProvider,
                 private sceneProvider: SceneProvider,
                 private cameraProvider: CameraProvider,
                 private animateProvider: AnimateProvider) {
-      const canvas = canvasProvider.getCanvas();
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
+      this.canvas = canvasProvider.getCanvas();
       this.renderer = rendererProvider.setRenderer(new WebGLRenderer({ antialias: true }));
-      this.renderer.setSize( screenWidth, screenHeight );
-
-      this.context = canvas.getContext('2d');
+      this.context = this.canvas.getContext('2d');
+      const canvasWidth = this.canvas.width;
+      const canvasHeight = this.canvas.height;
+      this.renderer.setSize(canvasWidth, canvasHeight);
     }
 
     public ngOnInit() {
@@ -53,12 +51,12 @@ export class  RendererComponent implements OnInit {
     }
 
     private onWindowResize() {
-      const screenWidth = window.innerWidth;
-      const screenHeight = window.innerHeight;
-      this.renderer.setSize(screenWidth, screenHeight);
+      const canvasWidth = this.canvas.width;
+      const canvasHeight = this.canvas.height;
+      this.renderer.setSize(canvasWidth, canvasHeight);
       const camera = this.cameraProvider.getCamera();
       if (camera instanceof PerspectiveCamera) {
-        camera.aspect = screenWidth / screenHeight;
+        camera.aspect = canvasWidth / canvasHeight;
         camera.updateProjectionMatrix();
       }
     }

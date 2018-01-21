@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataProviderService} from './data.provider.service';
 import {HttpHeaders} from '@angular/common/http';
 
-@Component({ selector: 'app-root', templateUrl: './app.component.html' })
+@Component({ selector: 'app-root', templateUrl: './app.component.html', styleUrls: ['./app.component.css'] })
 export class AppComponent implements OnInit {
     private data: Object;
 

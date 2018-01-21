@@ -11,10 +11,10 @@ import {canvasProviderFactory} from './canvas-provider-factory';
 export class ThreeAreaComponent {
 
   @Input()
-  private height = 100;
+  private height = 98;
 
   @Input()
-  private width = 100;
+  private width = 98;
 
   private canvas: any;
 
