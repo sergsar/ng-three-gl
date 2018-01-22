@@ -9,37 +9,37 @@ import {HemisphereLightComponent} from './hemisphere-light.component';
 import {RendererProvider} from './renderer-provider.service';
 import {CameraProvider} from './camera-provider.service';
 import {SceneProvider} from './scene-provider.service';
-import {CameraOrbitControlComponent} from './camera-orbit-control.component';
+import {OrbitControllerComponent} from './orbit-controller.component';
 import {AnimateProvider} from './animate-provider.service';
 import {Object3dComponent} from './object3d.component';
 
 @NgModule({
     imports: [],
     declarations: [
-        ThreeAreaComponent,
-        DirectLightComponent,
-        HemisphereLightComponent,
-        RendererComponent,
-        SceneComponent,
-        PerspectiveCameraComponent,
-        CameraOrbitControlComponent,
-        Object3dComponent
+      ThreeAreaComponent,
+      DirectLightComponent,
+      HemisphereLightComponent,
+      RendererComponent,
+      SceneComponent,
+      PerspectiveCameraComponent,
+      OrbitControllerComponent,
+      Object3dComponent
     ],
     exports: [
-        ThreeAreaComponent,
-        DirectLightComponent,
-        HemisphereLightComponent,
-        RendererComponent,
-        SceneComponent,
-        PerspectiveCameraComponent,
-        CameraOrbitControlComponent,
-        Object3dComponent
+      ThreeAreaComponent,
+      DirectLightComponent,
+      HemisphereLightComponent,
+      RendererComponent,
+      SceneComponent,
+      PerspectiveCameraComponent,
+      OrbitControllerComponent,
+      Object3dComponent
     ],
     providers: [
-        AnimateProvider,
-        RendererProvider,
-        CameraProvider,
-        SceneProvider
+      AnimateProvider,
+      RendererProvider,
+      CameraProvider,
+      SceneProvider
     ]
 })
 

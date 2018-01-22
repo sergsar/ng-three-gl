@@ -1,17 +1,18 @@
 import {Component} from '@angular/core';
-import {CameraProvider} from './camera-provider.service';
 import {CanvasProvider} from './canvas-provider.service';
+import {Controller} from './controller';
 
 declare var require: any;
 const THREE = require('three');
 const OrbitControls = require('three-orbit-controls')(THREE);
 
-@Component({selector: 'camera-orbit-control', template: ''})
-export class CameraOrbitControlComponent {
+@Component({selector: 'orbit-controller', template: ''})
+export class OrbitControllerComponent implements Controller {
 
-    constructor(cameraProvider: CameraProvider, canvasProvider: CanvasProvider) {
-      const perspectiveCamera = cameraProvider.getCamera();
-      const controls = new OrbitControls(perspectiveCamera, canvasProvider.getCanvas());
+    constructor(private canvasProvider: CanvasProvider) { }
+
+    public setControllable(controllable: Object) {
+      const controls = new OrbitControls(controllable, this.canvasProvider.getCanvas());
       const degToRad = Math.PI / 180;
       controls.minAzimuthAngle = -60 * degToRad;
       controls.maxAzimuthAngle = 60 * degToRad;

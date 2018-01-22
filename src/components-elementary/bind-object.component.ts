@@ -13,10 +13,6 @@ export class BindObjectComponent {
     @ContentChildren(BindObjectComponent)
     private objects: QueryList<BindObjectComponent> = new QueryList<BindObjectComponent>();
 
-    // ngOnInit() {
-    //     console.log(this.name);
-    // }
-
     public getItems(): QueryList<BindItemComponent> {
         return this.items;
     }
