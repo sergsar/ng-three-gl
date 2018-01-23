@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ContentChildren, ElementRef, forwardRef, QueryList} from '@angular/core';
+import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
 import {PerspectiveCamera} from 'three';
 import {CameraProvider} from './camera-provider.service';
 import {RendererProvider} from './renderer-provider.service';

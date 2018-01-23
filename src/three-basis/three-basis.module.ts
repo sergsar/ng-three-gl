@@ -12,6 +12,7 @@ import {SceneProvider} from './scene-provider.service';
 import {OrbitControllerComponent} from './orbit-controller.component';
 import {AnimateProvider} from './animate-provider.service';
 import {Object3dComponent} from './object3d.component';
+import {Group3dComponent} from './group3d.component';
 
 @NgModule({
     imports: [],
@@ -23,7 +24,8 @@ import {Object3dComponent} from './object3d.component';
       SceneComponent,
       PerspectiveCameraComponent,
       OrbitControllerComponent,
-      Object3dComponent
+      Object3dComponent,
+      Group3dComponent
     ],
     exports: [
       ThreeAreaComponent,
@@ -33,7 +35,8 @@ import {Object3dComponent} from './object3d.component';
       SceneComponent,
       PerspectiveCameraComponent,
       OrbitControllerComponent,
-      Object3dComponent
+      Object3dComponent,
+      Group3dComponent
     ],
     providers: [
       AnimateProvider,

@@ -1,11 +1,13 @@
-import {Component, forwardRef} from '@angular/core';
+import {Component} from '@angular/core';
 import {DirectionalLight} from 'three';
 import {Object3dComponent} from './object3d.component';
+import {object3dProviderFactory} from './object3d-provider.factory';
 
 @Component({
     selector: 'direct-light',
     template: '',
-    providers: [{ provide: Object3dComponent, useExisting: forwardRef(() => DirectLightComponent) }]})
+    providers: [object3dProviderFactory(DirectLightComponent)]
+})
 export class DirectLightComponent extends Object3dComponent {
     private directionalLight: DirectionalLight;
 

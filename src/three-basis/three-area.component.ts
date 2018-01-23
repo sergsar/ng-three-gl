@@ -1,6 +1,6 @@
 import {Component, ElementRef, Input} from '@angular/core';
 import {CanvasProvider} from './canvas-provider.service';
-import {canvasProviderFactory} from './canvas-provider-factory';
+import {canvasProviderFactory} from './canvas-provider.factory';
 
 
 @Component({

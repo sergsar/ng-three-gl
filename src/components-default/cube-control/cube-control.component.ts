@@ -1,4 +1,4 @@
-import {Component, forwardRef, ContentChildren, QueryList, AfterContentInit} from '@angular/core';
+import {Component, ContentChildren, QueryList, AfterContentInit} from '@angular/core';
 import {Object3dComponent} from '../../three-basis/object3d.component';
 import {CubeFirstElement} from './cube-first-element';
 import {
@@ -13,11 +13,12 @@ import {anchorToVector2} from '../../three-basis/anchor-to-vector2';
 import {ElementProviderService} from '../../three-basis/element-provider.service';
 import {BindItemComponent} from '../../components-elementary/bind-item.component';
 import {UvMapProjector} from '../../three-basis/uv-map-projector';
+import {object3dProviderFactory} from '../../three-basis/object3d-provider.factory';
 
 @Component({
     selector: 'cube-control',
     template: '<ng-content></ng-content>',
-    providers: [{ provide: Object3dComponent, useExisting: forwardRef(() => CubeControlComponent) }]
+    providers: [object3dProviderFactory(CubeControlComponent)]
 })
 export class CubeControlComponent extends Object3dComponent implements AfterContentInit {
 
