@@ -13,6 +13,6 @@ spec:
     spec:
       containers:
       - name: ng-three-gl
-        image: gcr.io/ng-three-gl/ng-three-gl:v3
+        image: gcr.io/ng-three-gl/ng-three-gl:v4
         ports:
         - containerPort: 80
