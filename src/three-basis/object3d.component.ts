@@ -1,24 +1,12 @@
-import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
-import {Object3D as ThreeObject} from 'three';
+import {Component} from '@angular/core';
+import {Object3D} from 'three';
 
 @Component({template: ''})
-export class Object3dComponent implements AfterContentInit {
+export class Object3dComponent {
 
-    protected object3d: ThreeObject;
+    protected object3d: Object3D;
 
-    @ContentChildren(Object3dComponent)
-    private objects3D: QueryList<Object3dComponent> = new QueryList<Object3dComponent>();
-
-    ngAfterContentInit() {
-        this.objects3D.forEach(p => {
-            const object = p.getObject3D();
-            if (object !== this.object3d) {
-                this.object3d.add(object);
-            }
-        });
-    }
-
-    public getObject3D(): ThreeObject {
+    public getObject3D(): Object3D {
         return this.object3d;
     }
 }
