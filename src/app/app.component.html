@@ -25,8 +25,8 @@
                     </bind-object>
                 </bind-object>
                 <bind-object name="CubeParts">
-                    <bind-item key="Title" value="{{getData()['CubeParts']['Title']}}"></bind-item>
-                    <bind-object *ngFor="let cubePart of getData()['CubeParts']['Parts']" name="CubePart">
+                    <bind-item key="Title" value="{{getData()['CubeParts'] && getData()['CubeParts']['Title']}}"></bind-item>
+                    <bind-object *ngFor="let cubePart of getData()['CubeParts'] && getData()['CubeParts']['Parts']" name="CubePart">
                       <bind-item key="Title" value="{{cubePart['Title']}}"></bind-item>
                       <bind-item key="Name" value="{{cubePart['Name']}}"></bind-item>
                       <bind-item key="Value" value="{{cubePart['Value']}}"></bind-item>
@@ -34,8 +34,8 @@
                     </bind-object>
                 </bind-object>
                 <bind-object name="CubeRates">
-                    <bind-item key="Title" value="{{getData()['CubeRates']['Title']}}"></bind-item>
-                    <bind-object *ngFor="let cubeRate of getData()['CubeRates']['Rates']" name="CubeRate">
+                    <bind-item key="Title" value="{{getData()['CubeRates'] && getData()['CubeRates']['Title']}}"></bind-item>
+                    <bind-object *ngFor="let cubeRate of getData()['CubeRates'] && getData()['CubeRates']['Rates']" name="CubeRate">
                       <bind-item key="Title" value="{{cubeRate['Title']}}"></bind-item>
                       <bind-item key="Color" value="{{cubeRate['Color']}}"></bind-item>
                       <bind-item key="Percent" value="{{cubeRate['Percent']}}"></bind-item>

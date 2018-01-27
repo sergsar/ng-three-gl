@@ -14,10 +14,6 @@ export class DataProviderService {
         return this.httpClient.get(url, options);
     }
 
-    // public subscribe(url: string, next?: (value: T) => void, options?: Map): void {
-    //
-    // }
-
     public getPromise<T>(url: string, options?: {}): Promise<T>;
 
     public getPromise(url: string, options?: {}): Promise<Object> {

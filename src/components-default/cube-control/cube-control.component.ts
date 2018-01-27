@@ -62,7 +62,10 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
         const partsHeight = 0.1;
         const cubePartsRoot = this.objects.filter(p => p.name === 'CubeParts')[0];
         const cubeParts = cubePartsRoot.getObjects().filter(p => p.name === 'CubePart').sort(p => -Number(p.getItems().filter(p1 => p1.key === 'Value')[0].value));
-        const ratesMaxValue = Number(cubeParts[cubeParts.length - 1].getItems().filter(p => p.key === 'Value')[0].value);
+        let ratesMaxValue = 1;
+        if (cubeParts.length > 0) {
+          ratesMaxValue = Number(cubeParts[cubeParts.length - 1].getItems().filter(p => p.key === 'Value')[0].value);
+        }
         const cubePartsCount = cubeParts.length;
         for (let i = 0; i < cubePartsCount; i++) {
             const cubePart = cubeParts[i];
@@ -103,6 +106,10 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
             group.add(plankGroup);
             group.add(element);
         }
+        if (cubePartsCount === 0) {
+          const element = new CubeFirstElement(1, partsHeight, getBodyMaterial('gray')).getElement();
+          group.add(element);
+        }
 
         const ratesThickness = 0.08;
         const cubeRatesRoot = this.objects.filter(p => p.name === 'CubeRates')[0];
@@ -120,17 +127,34 @@ export class CubeControlComponent extends Object3dComponent implements AfterCont
             widths = widths + width;
             group.add(element);
         });
+        if (cubeRates.length === 0) {
+          const geometry = new BoxGeometry(1, ratesThickness, ratesThickness);
+          uvMapProjector.box(geometry);
+          const element = new Mesh(geometry, getBodyMaterial('gray'));
+          element.translateOnAxis(new Vector3(0, partsHeight + ratesThickness * 0.5, (ratesThickness - 1) * 0.5), 1);
+          group.add(element);
+        }
 
         const cubeTitle = this.items.filter(p => p.key === 'Title')[0].value;
         const ratesTitle = cubeRatesRoot.getItems().filter(p => p.key === 'Title')[0].value;
-        const leftRateValue = cubeRates[0].getItems().filter(p => p.key === 'Value')[0].value;
-        const rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
-        const leftPercentValue = cubeRates[0].getItems().filter(p => p.key === 'Percent')[0].value;
-        const rightPercentValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Percent')[0].value;
-        const leftText = cubeRates[0].getItems().filter(p => p.key === 'Title')[0].value;
-        const rightText = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Title')[0].value;
-        const leftRateColor = cubeRates[0].getItems().filter(p => p.key === 'Color')[0].value;
-        const rightRateColor = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Color')[0].value;
+        let leftRateValue = '0';
+        let rightRateValue = '0';
+        let leftPercentValue = '0';
+        let rightPercentValue = '0';
+        let leftText = 'no data';
+        let rightText = 'no data';
+        let leftRateColor = 'gray';
+        let rightRateColor = 'gray';
+        if (cubeRates.length > 0) {
+          leftRateValue = cubeRates[0].getItems().filter(p => p.key === 'Value')[0].value;
+          rightRateValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Value')[0].value;
+          leftPercentValue = cubeRates[0].getItems().filter(p => p.key === 'Percent')[0].value;
+          rightPercentValue = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Percent')[0].value;
+          leftText = cubeRates[0].getItems().filter(p => p.key === 'Title')[0].value;
+          rightText = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Title')[0].value;
+          leftRateColor = cubeRates[0].getItems().filter(p => p.key === 'Color')[0].value;
+          rightRateColor = cubeRates[cubeRates.length - 1].getItems().filter(p => p.key === 'Color')[0].value;
+        }
         const ratesTitleSize = 0.04;
         const ratesValueSize = 0.05;
         const percentValueSize = 0.12;
