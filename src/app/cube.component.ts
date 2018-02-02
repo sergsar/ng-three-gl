@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {DataProviderService} from './data.provider.service';
 import {HttpHeaders} from '@angular/common/http';
 
-@Component({ templateUrl: './cube.component.html' })
+@Component({ templateUrl: './cube.component.html', styleUrls: ['./cube.component.css'] })
 export class CubeComponent implements OnInit {
   private data: Object;
 
