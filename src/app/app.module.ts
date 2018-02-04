@@ -10,13 +10,14 @@ import {ComponentsElementaryModule} from '../components-elementary/components-el
 import {CubeComponent} from './cube.component';
 import {PageNotFoundComponent} from './not-found.component';
 import {AppRoutingModule} from './app-routing.module';
+import {MapComponent} from './map.component';
 
 
 
 
 @NgModule({
   imports:      [ BrowserModule, AppRoutingModule, ThreeBasisModule, HttpClientModule, ComponentsDefaultModule, ComponentsElementaryModule ],
-  declarations: [ AppComponent, CubeComponent, PageNotFoundComponent ],
+  declarations: [ AppComponent, CubeComponent, PageNotFoundComponent, MapComponent ],
   bootstrap:    [ AppComponent ],
   providers: [ DataProviderService ] // TODO: delete, only needed for dataprov tests
 })
