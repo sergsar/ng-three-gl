@@ -1,42 +1,23 @@
-FROM node AS builder
+FROM alpine:latest
 
-# --------------------------------------
-# Install Chrome for testing
-# --------------------------------------
-#RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-#RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-#RUN apt-get update && apt-get install -y google-chrome-stable
+# update alpine linux
+RUN apk update && apk upgrade && \
+    apk add nodejs && \
+    # may comment this line in my computer.
+    apk add nodejs-npm && \
+    npm install -g @angular/cli@1.6.6
 
-# --------------------------------------
-# Install npm packages
-# --------------------------------------
-
+# set the working directory to /app
 WORKDIR /app
-COPY package.json ./package.json
-RUN yarn && yarn global add @angular/cli
 
-COPY . /app
+# add source code to images
+ADD . /app
 
-# --------------------------------------
-# Run Tests
-# --------------------------------------
-#RUN ng test --progress false --single-run
+# install dependencies
+RUN npm install
 
-# --------------------------------------
-# Build PROD & BETA
-# --------------------------------------
-RUN ng build --prod --no-progress
+# expose port 3000
+EXPOSE 3000
 
-# --------------------------------------
-# Create final image
-# --------------------------------------
-FROM nginx:1.13.1
-
-WORKDIR /app
-COPY --from=builder /app/dist .
-
-RUN  rm -rf /usr/share/nginx/html/* && cp -R /app/* /usr/share/nginx/html/
-
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-EXPOSE 80
+# run ng serve on localhost
+CMD ["ng","serve", "--host", "0.0.0.0", "--disable-host-check"]
