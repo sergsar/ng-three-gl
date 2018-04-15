@@ -11,11 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: nodejs
+runtime: custom
 env: flex
-
-env_variables:
-  API_KEY: YOUR_API_KEY
 
 manual_scaling:
   instances: 1
