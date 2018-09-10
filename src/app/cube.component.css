@@ -9,7 +9,9 @@ canvas {
   margin:auto;
   z-index: 1;
 }
-
+a {
+  color: white;
+}
 #idvp-logo {
   position: absolute;
   top: 35px;
