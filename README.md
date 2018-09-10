@@ -3,8 +3,7 @@
 
 First example component - cube loads json datasource fore simple business logic visualize goals
 
-our planes support to visualize any kind of data with no complexity limitation components in 3D space powered by latest Angular CLI and Three.js
-
+Our planes to support visualization of any kind data with no complexity limitation components in 3D space
 ```html
 <div *ngIf="getData()" >
   <a href="http://www.idvp.net/" id="idvp-logo">
