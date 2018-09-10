@@ -3,6 +3,8 @@ is 3d framework prototype for using webgl javascript library three.js as html vi
 
 our first example component - cube is using json datasource fore simple business logic visualize goals
 
+our planes support to visualize any kind of data with no complexity limitation components in 3D space powered by latest Angular CLI and Three.js
+
 ```html
 <div *ngIf="getData()" >
   <a href="http://www.idvp.net/" id="idvp-logo">
