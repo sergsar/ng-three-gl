@@ -1,5 +1,5 @@
 <a href="http://ng-three-gl.xyz" >ng-three-gl</a>
-3d framework prototype designed on Angular 5 and WebGL javascript library Three.js as html visual components
+is 3d framework prototype designed on Angular 5 and WebGL javascript library Three.js as html visual components
 
 First example component - cube loads json datasource fore simple business logic visualize goals
 
