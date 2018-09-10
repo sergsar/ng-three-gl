@@ -1,7 +1,7 @@
 <a href="http://ng-three-gl.xyz" >ng-three-gl</a>
 is 3d framework prototype for using webgl javascript library three.js as html visual components in angular cli
 
-our first example component - cube is using json datasource fore simple business logic visualize goals
+first example component - cube loads json datasource fore simple business logic visualize goals
 
 our planes support to visualize any kind of data with no complexity limitation components in 3D space powered by latest Angular CLI and Three.js
 
