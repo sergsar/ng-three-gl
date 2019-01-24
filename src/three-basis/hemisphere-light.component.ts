@@ -1,21 +1,21 @@
-import {Component} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {HemisphereLight} from 'three';
+import { GroupProvider } from './group-provider.service';
 import {Object3dComponent} from './object3d.component';
-import {object3dProviderFactory} from './object3d-provider.factory';
 
 @Component({
-  selector: 'hemisphere-light',
+  selector: 'three-hemisphere-light',
   template: '',
-  providers: [object3dProviderFactory(HemisphereLightComponent)]
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HemisphereLightComponent extends Object3dComponent {
-  private hemisphereLight: HemisphereLight;
 
-  constructor() {
-    super();
 
-    this.hemisphereLight = new HemisphereLight(0x808080, 0x404040);
+  constructor(groupProvider: GroupProvider) {
+    super(groupProvider);
 
-    this.object3d = this.hemisphereLight;
+    const hemisphereLight = new HemisphereLight(0x808080, 0x404040);
+
+    this.Group.add(hemisphereLight);
   }
 }

@@ -1,10 +1,14 @@
-import {AfterContentInit, Component, ContentChildren, QueryList} from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList } from '@angular/core';
 import {PerspectiveCamera} from 'three';
 import {CameraProvider} from './camera-provider.service';
-import {RendererProvider} from './renderer-provider.service';
 import {Controller} from './controller';
+import {RendererProvider} from './renderer-provider.service';
 
-@Component({selector: 'perspective-camera', template: '<ng-content></ng-content>'})
+@Component({
+    selector: 'three-perspective-camera',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+})
 export class PerspectiveCameraComponent implements AfterContentInit {
     @ContentChildren('controller')
     private controllers: QueryList<Controller> = new QueryList<Controller>();
@@ -23,7 +27,7 @@ export class PerspectiveCameraComponent implements AfterContentInit {
       this.cameraProvider.setCamera(this.perspectiveCamera);
     }
 
-    ngAfterContentInit() {
-      this.controllers.forEach(p => p.setControllable(this.perspectiveCamera));
+    public ngAfterContentInit() : void {
+      this.controllers.forEach((p) => p.setControllable(this.perspectiveCamera));
     }
 }

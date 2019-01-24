@@ -1,19 +1,24 @@
-import {Injectable} from '@angular/core';
+import { ElementRef, Inject, Injectable } from '@angular/core';
 import {Scene} from 'three';
 
 @Injectable()
 export class SceneProvider {
-    private scenes: Map<string, Scene> = new Map()
+    private scenes: Map<object, Scene> = new Map();
+    private parentSceneProvider: SceneProvider;
 
-    public getScene(id?: string): Scene {
+    public getScene(id?: object): Scene {
 
         let scene = this.scenes.get(id);
 
-        if (scene == null) {
+        if (scene === undefined) {
             scene = new Scene();
             this.scenes.set(id, scene);
         }
 
         return scene;
+    }
+
+    public removeScene(id?: object) : void {
+        this.scenes.delete(id);
     }
 }

@@ -1,22 +1,22 @@
-import {Component} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {DirectionalLight} from 'three';
+import { GroupProvider } from './group-provider.service';
 import {Object3dComponent} from './object3d.component';
-import {object3dProviderFactory} from './object3d-provider.factory';
 
 @Component({
-    selector: 'direct-light',
+    selector: 'three-direct-light',
     template: '',
-    providers: [object3dProviderFactory(DirectLightComponent)]
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DirectLightComponent extends Object3dComponent {
-    private directionalLight: DirectionalLight;
 
-    constructor() {
-        super();
 
-        this.directionalLight = new DirectionalLight(0x999999);
-        this.directionalLight.position.set(1, 1, 1);
+    constructor(groupProvider: GroupProvider) {
+        super(groupProvider);
 
-        this.object3d = this.directionalLight;
+        const directionalLight = new DirectionalLight(0x999999);
+        directionalLight.position.set(1, 1, 1);
+
+        this.Group.add(directionalLight);
     }
 }

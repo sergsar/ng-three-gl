@@ -1,38 +1,33 @@
-import {Component, ElementRef, Input} from '@angular/core';
-import {CanvasProvider} from './canvas-provider.service';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import {canvasProviderFactory} from './canvas-provider.factory';
+import {CanvasProvider} from './canvas-provider.service';
 
 
 @Component({
   selector: 'three-area',
   template: `<ng-content></ng-content>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [{ provide: CanvasProvider, deps: [ElementRef], useFactory: canvasProviderFactory }]
 })
-export class ThreeAreaComponent {
+export class ThreeAreaComponent implements OnChanges {
 
-  @Input()
-  private height = 98;
+    @Input()
+    private height = 100;
 
-  @Input()
-  private width = 98;
+    @Input()
+    private width = 100;
 
-  private canvas: any;
+    private canvas: HTMLCanvasElement;
+    private context: CanvasRenderingContext2D;
 
-  constructor(canvasProvider: CanvasProvider) {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    this.canvas = canvasProvider.getCanvas();
-    this.canvas.width = screenWidth * this.width / 100;
-    this.canvas.height = screenHeight * this.height / 100;
+    constructor(canvasProvider: CanvasProvider) {
+        this.canvas = canvasProvider.getCanvas();
+        this.context = canvasProvider.getContext();
 
-    window.addEventListener( 'resize', () => this.onWindowResize() , false );
-  }
+    }
 
-  private onWindowResize() {
-    const screenWidth = window.innerWidth;
-    const screenHeight = window.innerHeight;
-    this.canvas.width = screenWidth * this.width / 100;
-    this.canvas.height = screenHeight * this.height / 100;
-  }
-
+    public ngOnChanges(changes: SimpleChanges): void {
+        this.canvas.width = this.width;
+        this.canvas.height = this.height;
+    }
 }

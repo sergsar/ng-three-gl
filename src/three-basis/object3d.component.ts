@@ -1,12 +1,51 @@
-import {Component} from '@angular/core';
-import {Object3D} from 'three';
+import {
+    Input,
+    OnChanges,
+    OnDestroy,
+    SimpleChanges,
+} from '@angular/core';
+import { Group, Object3D } from 'three';
+import { GroupProvider } from './group-provider.service';
 
-@Component({template: ''})
-export class Object3dComponent {
+export class Object3dComponent implements OnChanges {
 
-    protected object3d: Object3D;
+    @Input()
+    public positionX: number = 0.0;
+    @Input()
+    public positionY: number = 0.0;
+    @Input()
+    public positionZ: number = 0.0;
+    @Input()
+    public rotationX: number = 0.0;
+    @Input()
+    public rotationY: number = 0.0;
+    @Input()
+    public rotationZ: number = 0.0;
+    @Input()
+    public scaleX: number = 1.0;
+    @Input()
+    public scaleY: number = 1.0;
+    @Input()
+    public scaleZ: number = 1.0;
 
-    public getObject3D(): Object3D {
-        return this.object3d;
+    private group: Group;
+
+
+    constructor(private groupProvider: GroupProvider) {
+        this.group = groupProvider.Group;
+    }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        if(this.group === undefined){
+            return;
+        }
+
+        this.group.position.set(this.positionX, this.positionY, this.positionZ);
+        this.group.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
+        this.group.scale.set(this.scaleX, this.scaleY, this.scaleZ);
+    }
+
+    protected get Group() : Group {
+        return this.group;
     }
 }

@@ -1,28 +1,60 @@
-import {AfterContentInit, Component, ContentChild, ContentChildren, QueryList} from '@angular/core';
-import {Scene} from 'three';
-import {PerspectiveCameraComponent} from './perspective-camera.component';
-import {SceneProvider} from './scene-provider.service';
-import {Object3dComponent} from './object3d.component';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    ContentChild,
+    InjectFlags,
+    Injector,
+    Input,
+    OnChanges,
+    OnInit,
+    SimpleChanges,
+    SkipSelf,
+} from '@angular/core';
+import { Color, Scene } from 'three';
+import { groupProviderFactory } from './group-provider.factory';
+import { GroupProvider } from './group-provider.service';
+import { PerspectiveCameraComponent } from './perspective-camera.component';
+import { SceneProvider } from './scene-provider.service';
 
 @Component({
-    selector: 'scene',
-    template: '<ng-content></ng-content>'
+    selector: 'three-scene',
+    template: '<ng-content></ng-content>',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [{ provide: GroupProvider, useFactory: groupProviderFactory }],
 })
-export class SceneComponent implements AfterContentInit {
+export class SceneComponent implements OnInit, OnChanges {
+
+    @Input()
+    public backgroundColor: string = '255 255 255';
+
+    @ContentChild(PerspectiveCameraComponent)
+    public perspectiveCameraComponent: PerspectiveCameraComponent;
 
     private scene: Scene;
 
-    @ContentChild(PerspectiveCameraComponent)
-    perspectiveCameraComponent: PerspectiveCameraComponent;
-
-    @ContentChildren(Object3dComponent)
-    objects3d: QueryList<Object3dComponent> = new QueryList<Object3dComponent>();
-
-    constructor(private sceneProvider: SceneProvider) {
-        this.scene = this.sceneProvider.getScene();
+    constructor(private sceneProvider: SceneProvider, private groupProvider: GroupProvider) {
+        this.scene = sceneProvider.getScene();
+        this.scene.add(groupProvider.Group);
     }
 
-    ngAfterContentInit() {
-      this.objects3d.forEach(p => this.scene.add(p.getObject3D()));
+    public ngOnInit(): void {
+        this.updateColor();
     }
+
+    public ngOnChanges(changes: SimpleChanges): void {
+        this.updateColor();
+    }
+
+    private updateColor() : void {
+        if(this.scene === undefined)
+        {
+            return;
+        }
+        const colorString = this.backgroundColor.split(/\s/);
+        const r = Number(colorString[0]) / 255.0;
+        const g = Number(colorString[1]) / 255.0;
+        const b = Number(colorString[2]) / 255.0;
+        this.scene.background = new Color(r, g, b);
+    }
+
 }

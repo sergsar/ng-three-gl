@@ -1,49 +1,46 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 
-import {RendererComponent} from './renderer.component';
-import {SceneComponent} from './scene.component';
-import {PerspectiveCameraComponent} from './perspective-camera.component';
-import {ThreeAreaComponent} from './three-area.component';
-import {DirectLightComponent} from './direct-light.component';
-import {HemisphereLightComponent} from './hemisphere-light.component';
-import {RendererProvider} from './renderer-provider.service';
-import {CameraProvider} from './camera-provider.service';
-import {SceneProvider} from './scene-provider.service';
-import {OrbitControllerComponent} from './orbit-controller.component';
-import {AnimateProvider} from './animate-provider.service';
-import {Object3dComponent} from './object3d.component';
-import {Group3dComponent} from './group3d.component';
+import { AnimateProvider } from './animate-provider.service';
+import { CameraProvider } from './camera-provider.service';
+import { DirectLightComponent } from './direct-light.component';
+import { GroupProvider } from './group-provider.service';
+import { GroupComponent } from './group.component';
+import { HemisphereLightComponent } from './hemisphere-light.component';
+import { OrbitControllerComponent } from './orbit-controller.component';
+import { PerspectiveCameraComponent } from './perspective-camera.component';
+import { RendererProvider } from './renderer-provider.service';
+import { RendererComponent } from './renderer.component';
+import { SceneComponent } from './scene.component';
+import { ThreeAreaComponent } from './three-area.component';
+
 
 @NgModule({
     imports: [],
     declarations: [
-      ThreeAreaComponent,
-      DirectLightComponent,
-      HemisphereLightComponent,
-      RendererComponent,
-      SceneComponent,
-      PerspectiveCameraComponent,
-      OrbitControllerComponent,
-      Object3dComponent,
-      Group3dComponent
+        ThreeAreaComponent,
+        RendererComponent,
+        SceneComponent,
+        PerspectiveCameraComponent,
+        DirectLightComponent,
+        HemisphereLightComponent,
+        OrbitControllerComponent,
+        GroupComponent,
     ],
     exports: [
-      ThreeAreaComponent,
-      DirectLightComponent,
-      HemisphereLightComponent,
-      RendererComponent,
-      SceneComponent,
-      PerspectiveCameraComponent,
-      OrbitControllerComponent,
-      Object3dComponent,
-      Group3dComponent
+        ThreeAreaComponent,
+        RendererComponent,
+        SceneComponent,
+        PerspectiveCameraComponent,
+        DirectLightComponent,
+        HemisphereLightComponent,
+        OrbitControllerComponent,
+        GroupComponent,
     ],
     providers: [
-      AnimateProvider,
-      RendererProvider,
-      CameraProvider,
-      SceneProvider
-    ]
+        AnimateProvider,
+        RendererProvider,
+        CameraProvider,
+    ],
 })
 
 export  class ThreeBasisModule {}

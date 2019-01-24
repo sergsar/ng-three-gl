@@ -9,11 +9,11 @@ export class AnimateProvider {
         this.animate();
     }
 
-    public setFrameTask(key: Object, task: () => void) {
+    public setFrameTask(key: Object, task: () => void) : void {
         this.animateMap.set(key, task);
     }
 
-    private animate() {
+    private animate() : void  {
         this.ngZone.runOutsideAngular(() => requestAnimationFrame(() => this.animate()));
         this.animateMap.forEach( p => p());
     }

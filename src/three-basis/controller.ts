@@ -1,4 +1,4 @@
 export interface Controller {
-  setControllable(controllable: Object);
+  setControllable(controllable: Object) : void;
 }
 export declare const Controller;
