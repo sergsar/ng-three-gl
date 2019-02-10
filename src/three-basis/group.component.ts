@@ -1,6 +1,4 @@
-import { ChangeDetectionStrategy, Component, InjectFlags, Injector, SkipSelf } from '@angular/core';
-
-import { groupProviderFactory } from './group-provider.factory';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { GroupProvider } from './group-provider.service';
 import { Object3dComponent } from './object3d.component';
 
@@ -8,15 +6,12 @@ import { Object3dComponent } from './object3d.component';
     selector: 'three-group',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [{ provide: GroupProvider, useFactory: groupProviderFactory }],
+    providers: [GroupProvider],
 })
 export class GroupComponent extends Object3dComponent {
 
-    constructor(@SkipSelf() groupProvider: GroupProvider, injector: Injector) {
-        const selfGroupProvider = injector.get(GroupProvider);
-        super(selfGroupProvider);
-        groupProvider.Group.add(selfGroupProvider.Group);
+
+    constructor(groupProvider: GroupProvider) {
+        super(groupProvider);
     }
-
-
 }

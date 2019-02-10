@@ -1,23 +1,24 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent }  from './app.component';
+import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CubeComponent } from './cube.component';
+import { PageNotFoundComponent } from './not-found.component';
+import { AppRoutingModule } from './app-routing.module';
 import {ThreeBasisModule} from '../three-basis/three-basis.module';
-import {DataProviderService} from './data.provider.service';
-import {HttpClientModule} from '@angular/common/http';
-import {ComponentsDefaultModule} from '../components-default/components-default.module';
-import {ComponentsElementaryModule} from '../components-elementary/components-elementary.module';
-import {CubeComponent} from './cube.component';
-import {PageNotFoundComponent} from './not-found.component';
-import {AppRoutingModule} from './app-routing.module';
+import {ThreeComponentsModule} from '../three-components/three-components.module';
+import {ServicesModule} from '../services/services.module';
+import {DataProviderService} from '../services/data.provider.service';
+import {ElementProviderService} from '../services/element-provider.service';
 
 
 
 
 @NgModule({
-  imports:      [ BrowserModule, AppRoutingModule, ThreeBasisModule, HttpClientModule, ComponentsDefaultModule, ComponentsElementaryModule ],
+  imports:      [ BrowserModule, AppRoutingModule, HttpClientModule, ThreeBasisModule, ThreeComponentsModule, ServicesModule ],
   declarations: [ AppComponent, CubeComponent, PageNotFoundComponent ],
   bootstrap:    [ AppComponent ],
-  providers: [ DataProviderService ] // TODO: delete, only needed for dataprov tests
+  providers: [DataProviderService, ElementProviderService]
 })
 export class AppModule { }

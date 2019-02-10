@@ -1,45 +1,49 @@
 import { NgModule } from '@angular/core';
 
 import { AnimateProvider } from './animate-provider.service';
-import { CameraProvider } from './camera-provider.service';
+import { CanvasControllerComponent } from './canvas-controller.component';
 import { DirectLightComponent } from './direct-light.component';
-import { GroupProvider } from './group-provider.service';
+import { GridHelperComponent } from './grid-helper.component';
 import { GroupComponent } from './group.component';
 import { HemisphereLightComponent } from './hemisphere-light.component';
 import { OrbitControllerComponent } from './orbit-controller.component';
 import { PerspectiveCameraComponent } from './perspective-camera.component';
-import { RendererProvider } from './renderer-provider.service';
+import { RaycasterComponent } from './raycaster.component';
 import { RendererComponent } from './renderer.component';
 import { SceneComponent } from './scene.component';
-import { ThreeAreaComponent } from './three-area.component';
+import { TransformControllerComponent } from './transform-controller.component';
 
 
 @NgModule({
     imports: [],
     declarations: [
-        ThreeAreaComponent,
+        CanvasControllerComponent,
         RendererComponent,
         SceneComponent,
         PerspectiveCameraComponent,
         DirectLightComponent,
         HemisphereLightComponent,
         OrbitControllerComponent,
+        TransformControllerComponent,
         GroupComponent,
+        RaycasterComponent,
+        GridHelperComponent,
     ],
     exports: [
-        ThreeAreaComponent,
+        CanvasControllerComponent,
         RendererComponent,
         SceneComponent,
         PerspectiveCameraComponent,
         DirectLightComponent,
         HemisphereLightComponent,
         OrbitControllerComponent,
+        TransformControllerComponent,
         GroupComponent,
+        RaycasterComponent,
+        GridHelperComponent,
     ],
     providers: [
         AnimateProvider,
-        RendererProvider,
-        CameraProvider,
     ],
 })
 

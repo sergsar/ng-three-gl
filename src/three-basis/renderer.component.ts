@@ -1,71 +1,70 @@
-import { ChangeDetectionStrategy, Component, ContentChild, OnInit, } from '@angular/core';
-import {PerspectiveCamera, WebGLRenderer} from 'three';
-import {AnimateProvider} from './animate-provider.service';
-import {CameraProvider} from './camera-provider.service';
-import {CanvasProvider} from './canvas-provider.service';
-import {RendererProvider} from './renderer-provider.service';
-import { sceneProviderFactory } from './scene-provider.factory';
-import {SceneProvider} from './scene-provider.service';
-import {SceneComponent} from './scene.component';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Camera, PerspectiveCamera, WebGLRenderer } from 'three';
+import { AnimateProvider } from './animate-provider.service';
+import { CanvasControllerComponent } from './canvas-controller.component';
 
 @Component({
     selector: 'three-renderer',
     template: '<ng-content></ng-content>',
-    providers: [{ provide: SceneProvider, useFactory: sceneProviderFactory}],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class  RendererComponent implements OnInit {
-
-    @ContentChild(SceneComponent)
-    public sceneComponent: SceneComponent;
+export class  RendererComponent implements OnInit, OnChanges, OnDestroy {
 
 
-    private context: CanvasRenderingContext2D;
-    private renderer: WebGLRenderer;
-    private canvas: HTMLCanvasElement;
+    @Input()
+    public height = 100;
 
-    constructor(rendererProvider: RendererProvider,
-                canvasProvider: CanvasProvider,
-                private sceneProvider: SceneProvider,
-                private cameraProvider: CameraProvider,
+    @Input()
+    public width = 100;
+
+    public get Renderer() : WebGLRenderer {
+        return this.renderer;
+    }
+
+    private readonly renderer: WebGLRenderer;
+    private cameras: Map<object, Camera> = new Map();
+
+    constructor(private canvasControllerComponent: CanvasControllerComponent,
                 private animateProvider: AnimateProvider) {
-      this.canvas = canvasProvider.getCanvas();
-      this.renderer = rendererProvider.setRenderer(new WebGLRenderer({ antialias: true }));
-      this.context = canvasProvider.getContext();
+
+      this.renderer = new WebGLRenderer({ antialias: true, canvas: canvasControllerComponent.Canvas });
     }
 
     public ngOnInit() : void {
-        const canvasWidth = this.canvas.width;
-        const canvasHeight = this.canvas.height;
-
-        this.renderer.setSize(canvasWidth, canvasHeight);
-
-        const scene = this.sceneProvider.getScene();
-        const camera = this.cameraProvider.getCamera();
-
-        if (camera instanceof PerspectiveCamera) {
-            camera.aspect = canvasWidth / canvasHeight;
-            camera.updateProjectionMatrix();
-        }
-
-        const animateTask = () => {
-          this.renderer.render(scene, camera);
-          this.context.drawImage(this.renderer.domElement, 0, 0);
-        }
-        this.animateProvider.setFrameTask(this, animateTask);
-
-        window.addEventListener( 'resize', () => this.onWindowResize(), false );
+        this.resize();
     }
 
+    public ngOnChanges(changes: SimpleChanges): void {
+        this.resize();
+    }
 
-    private onWindowResize() : void {
-      const canvasWidth = this.canvas.width;
-      const canvasHeight = this.canvas.height;
-      this.renderer.setSize(canvasWidth, canvasHeight);
-      const camera = this.cameraProvider.getCamera();
-      if (camera instanceof PerspectiveCamera) {
-        camera.aspect = canvasWidth / canvasHeight;
-        camera.updateProjectionMatrix();
-      }
+    public ngOnDestroy(): void {
+        this.animateProvider.unsetFrameTask(this);
+    }
+
+    public resize() : void {
+        const rendererWidth = this.width;
+        const rendererHeight = this.height;
+
+        this.renderer.setSize(rendererWidth, rendererHeight);
+        this.renderer.setPixelRatio( window.devicePixelRatio );
+
+
+        this.cameras.forEach((p) => {
+            if (p instanceof PerspectiveCamera) {
+                p.aspect = rendererWidth / rendererHeight;
+                p.updateProjectionMatrix();
+            }
+        });
+    }
+
+    public getCamera(id?: object): Camera {
+        return this.cameras.get(id);
+    }
+
+    public setCamera(camera: Camera, id?: object) : void {
+        if(!this.cameras.has(id)) {
+            this.cameras.set(id, camera);
+        }
     }
 }

@@ -1,51 +1,53 @@
-import {
-    Input,
-    OnChanges,
-    OnDestroy,
-    SimpleChanges,
-} from '@angular/core';
-import { Group, Object3D } from 'three';
+import { Input } from '@angular/core';
+import { Group } from 'three';
 import { GroupProvider } from './group-provider.service';
 
-export class Object3dComponent implements OnChanges {
+export abstract class Object3dComponent {
 
     @Input()
-    public positionX: number = 0.0;
+    public set positionX(value: number) {
+        this.group.position.x = value;
+    }
     @Input()
-    public positionY: number = 0.0;
+    public set positionY(value: number) {
+        this.group.position.y = value;
+    }
     @Input()
-    public positionZ: number = 0.0;
+    public set positionZ(value: number) {
+        this.group.position.z = value;
+    }
     @Input()
-    public rotationX: number = 0.0;
+    public set rotationX(value: number) {
+        this.group.rotation.x = value;
+    }
     @Input()
-    public rotationY: number = 0.0;
+    public set rotationY(value: number) {
+        this.group.rotation.y = value;
+    }
     @Input()
-    public rotationZ: number = 0.0;
+    public set rotationZ(value: number) {
+        this.group.rotation.z = value;
+    }
     @Input()
-    public scaleX: number = 1.0;
+    public set scaleX(value: number) {
+        this.group.scale.x = value;
+    }
     @Input()
-    public scaleY: number = 1.0;
+    public set scaleY(value: number) {
+        this.group.scale.y = value;
+    }
     @Input()
-    public scaleZ: number = 1.0;
-
-    private group: Group;
-
-
-    constructor(private groupProvider: GroupProvider) {
-        this.group = groupProvider.Group;
+    public set scaleZ(value: number) {
+        this.group.scale.z = value;
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        if(this.group === undefined){
-            return;
-        }
-
-        this.group.position.set(this.positionX, this.positionY, this.positionZ);
-        this.group.rotation.set(this.rotationX, this.rotationY, this.rotationZ);
-        this.group.scale.set(this.scaleX, this.scaleY, this.scaleZ);
-    }
-
-    protected get Group() : Group {
+    public get Group() : Group {
         return this.group;
+    }
+
+    private readonly group: Group;
+
+    protected constructor(groupProvider: GroupProvider) {
+        this.group =  groupProvider.Group;
     }
 }

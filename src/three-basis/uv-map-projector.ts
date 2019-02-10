@@ -1,7 +1,8 @@
 import {Geometry, Vector3} from 'three';
 
 export class UvMapProjector {
-    box(geometry: Geometry): void {
+
+    public box(geometry: Geometry): void {
         const vertices = geometry.vertices;
         const directions = new Map([[new Vector3(1, 0, 0), ['y', 'z']], [new Vector3(0, 1, 0), ['x', 'z']], [new Vector3(0, 0, 1), ['x', 'y']]]);
         const faces = geometry.faces;

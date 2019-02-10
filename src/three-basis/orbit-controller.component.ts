@@ -1,20 +1,24 @@
-import {Component} from '@angular/core';
-import {CanvasProvider} from './canvas-provider.service';
-import {Controller} from './controller';
+import { Component, Input, OnInit } from '@angular/core';
+import { Group } from 'three';
+import { CanvasControllerComponent } from './canvas-controller.component';
+import { SceneComponent } from './scene.component';
 
 declare var require: any;
 const THREE = require('three');
-const OrbitControls = require('three-orbit-controls')(THREE);
+const OrbitControls = require('orbit-controls-three')(THREE);
 
 @Component({selector: 'three-orbit-controller', template: ''})
-export class OrbitControllerComponent implements Controller {
+export class OrbitControllerComponent implements OnInit {
 
-    constructor(private canvasProvider: CanvasProvider) { }
+    @Input()
+    public controllable: Object;
 
-    public setControllable(controllable: Object) : void {
-        const canvas = this.canvasProvider.getCanvas();
+    constructor(private canvasControllerComponent: CanvasControllerComponent, private sceneComponent: SceneComponent) { }
+
+    public ngOnInit(): void {
+        const canvas = this.canvasControllerComponent.Canvas
         // TODO: fix canvas event
-        const controls = new OrbitControls(controllable, canvas);
+        const controls = new OrbitControls(this.controllable, canvas);
         const degToRad = Math.PI / 180;
         controls.minAzimuthAngle = -60 * degToRad;
         controls.maxAzimuthAngle = 60 * degToRad;
@@ -26,7 +30,12 @@ export class OrbitControllerComponent implements Controller {
         // controls.dampingFactor = 0.5;
         controls.enablePan = false;
 
-        // controls.addEventListener('change', () => console.log('control changing'));
+        const scene = this.sceneComponent.getScene();
+        const wrapper = new Group();
+        wrapper.userData = controls;
+        wrapper.name = 'orbit-controls';
+        scene.add(wrapper);
 
+        // controls.addEventListener('change', () => console.log('control changing'));
     }
 }

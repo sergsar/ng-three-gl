@@ -1,6 +1,6 @@
-import {Mesh, BoxGeometry, Vector3, Material} from 'three';
-import {CubeElement} from './cube-element';
+import { BoxGeometry, Material, Mesh, Vector3 } from 'three';
 import {UvMapProjector} from '../../three-basis/uv-map-projector';
+import { CubeElement } from './cube-element';
 
 export class CubeFirstElement extends CubeElement {
 

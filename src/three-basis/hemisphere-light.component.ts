@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {HemisphereLight} from 'three';
 import { GroupProvider } from './group-provider.service';
-import {Object3dComponent} from './object3d.component';
+import { Object3dComponent } from './object3d.component';
 
 @Component({
   selector: 'three-hemisphere-light',
   template: '',
+  providers: [GroupProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HemisphereLightComponent extends Object3dComponent {

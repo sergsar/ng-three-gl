@@ -1,12 +1,12 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component } from '@angular/core';
 import { Color, Group, Material, Mesh, MeshLambertMaterial, SphereGeometry } from 'three';
 import { GroupProvider } from '../three-basis/group-provider.service';
-
 import { Object3dComponent } from '../three-basis/object3d.component';
 
 @Component({
     selector: 'three-sphere',
     template: '<ng-content></ng-content>',
+    providers: [GroupProvider],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SphereComponent extends Object3dComponent implements AfterContentInit {
@@ -26,7 +26,8 @@ export class SphereComponent extends Object3dComponent implements AfterContentIn
 
         const material = getBodyMaterial(new Color('orange'));
         const size = 0.5;
-        const sphereGeometry = new SphereGeometry(size);
+        const segments = 50;
+        const sphereGeometry = new SphereGeometry(size, segments, segments);
         const element = new Mesh(sphereGeometry, material);
         group.add(element);
         this.Group.add(group);

@@ -13,6 +13,10 @@ export class AnimateProvider {
         this.animateMap.set(key, task);
     }
 
+    public unsetFrameTask(key: Object) : void {
+        this.animateMap.delete(key);
+    }
+
     private animate() : void  {
         this.ngZone.runOutsideAngular(() => requestAnimationFrame(() => this.animate()));
         this.animateMap.forEach( p => p());

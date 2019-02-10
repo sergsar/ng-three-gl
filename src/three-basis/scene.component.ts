@@ -1,39 +1,22 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    ContentChild,
-    InjectFlags,
-    Injector,
-    Input,
-    OnChanges,
-    OnInit,
-    SimpleChanges,
-    SkipSelf,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, Input, OnChanges, OnInit, Optional, SimpleChanges } from '@angular/core';
 import { Color, Scene } from 'three';
-import { groupProviderFactory } from './group-provider.factory';
 import { GroupProvider } from './group-provider.service';
-import { PerspectiveCameraComponent } from './perspective-camera.component';
-import { SceneProvider } from './scene-provider.service';
 
 @Component({
     selector: 'three-scene',
     template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [{ provide: GroupProvider, useFactory: groupProviderFactory }],
+    providers: [GroupProvider],
 })
 export class SceneComponent implements OnInit, OnChanges {
 
     @Input()
-    public backgroundColor: string = '255 255 255';
+    public backgroundColor: string = '60 60 60';
 
-    @ContentChild(PerspectiveCameraComponent)
-    public perspectiveCameraComponent: PerspectiveCameraComponent;
+    private readonly scene: Scene;
 
-    private scene: Scene;
-
-    constructor(private sceneProvider: SceneProvider, private groupProvider: GroupProvider) {
-        this.scene = sceneProvider.getScene();
+    constructor(groupProvider: GroupProvider) {
+        this.scene = new Scene();
         this.scene.add(groupProvider.Group);
     }
 
@@ -45,8 +28,12 @@ export class SceneComponent implements OnInit, OnChanges {
         this.updateColor();
     }
 
+    public getScene(): Scene {
+        return this.scene;
+    }
+
     private updateColor() : void {
-        if(this.scene === undefined)
+        if(!this.scene)
         {
             return;
         }
