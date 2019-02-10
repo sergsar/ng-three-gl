@@ -30,7 +30,7 @@ export class  RendererComponent implements OnInit, OnChanges, OnDestroy {
       this.renderer = new WebGLRenderer({ antialias: true, canvas: canvasControllerComponent.Canvas });
     }
 
-    public ngOnInit() : void {
+    public ngOnInit(): void {
         this.resize();
     }
 
@@ -42,7 +42,7 @@ export class  RendererComponent implements OnInit, OnChanges, OnDestroy {
         this.animateProvider.unsetFrameTask(this);
     }
 
-    public resize() : void {
+    public resize(): void {
         const rendererWidth = this.width;
         const rendererHeight = this.height;
 

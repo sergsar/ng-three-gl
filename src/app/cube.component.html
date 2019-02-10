@@ -12,8 +12,8 @@
     <div><a href="https://github.com/sergsar/ng-three-gl">https://github.com/sergsar/ng-three-gl</a></div>
   </div>
   <canvas></canvas>
-  <three-canvas-controller >
-    <three-renderer >
+  <three-canvas-controller [width]="Width" [height]="Height">
+    <three-renderer [width]="Width" [height]="Height">
       <three-scene [backgroundColor]="'0 0 0'" #owner>
         <three-grid-helper [parent]="owner['scene']" [visible]="true"></three-grid-helper>
         <three-perspective-camera #controllable>

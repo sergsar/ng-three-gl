@@ -18,7 +18,7 @@ export class CanvasControllerComponent {
         this.canvas.width = value;
     }
 
-    get Canvas() : HTMLCanvasElement {
+    get Canvas(): HTMLCanvasElement {
         return this.canvas;
     }
 
