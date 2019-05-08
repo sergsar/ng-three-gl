@@ -68,15 +68,16 @@ export class CubeSerialElement extends CubeElement {
             normals.push(nx, ny, nz);
         }
 
-
-        function disposeArray() { this.array = null; }
-
-        geometry.addAttribute('position', new Float32BufferAttribute(positions, 3).onUpload(disposeArray));
-        geometry.addAttribute('normal', new Float32BufferAttribute(normals, 3).onUpload(disposeArray));
-        geometry.addAttribute('uv', new Float32BufferAttribute(uv, 2).onUpload(disposeArray));
+        geometry.addAttribute('position', new Float32BufferAttribute(positions, 3).onUpload(this.disposeArray));
+        geometry.addAttribute('normal', new Float32BufferAttribute(normals, 3).onUpload(this.disposeArray));
+        geometry.addAttribute('uv', new Float32BufferAttribute(uv, 2).onUpload(this.disposeArray));
 
         geometry.computeBoundingBox();
 
         this.element = new Mesh( geometry, this.material );
+    }
+
+    private disposeArray = function(this: Float32BufferAttribute): void {
+        this.array = null;
     }
 }

@@ -1,5 +1,5 @@
 // tslint:disable:cyclomatic-complexity
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { BoxGeometry, BufferGeometry, Color, Font, Group, Material, Mesh, MeshBasicMaterial, MeshLambertMaterial, Object3D,
     PlaneGeometry, RepeatWrapping, RGBFormat, ShapeGeometry, Texture, Vector3 } from 'three';
 import { DataProviderService } from '../../services/data.provider.service';
@@ -21,7 +21,18 @@ import { CubeSerialElement } from './cube-serial-element';
 })
 export class CubeComponent extends Object3dComponent implements OnInit {
 
+    @Input()
+    public set title(value: string) {
+        if(this.cubeTitleElement) {
+            const cubeTitleGeometry = this.getTextGeometry(value, this.fontData, this.cubeTitleSize, Anchor.LowerCenter);
+            this.cubeTitleElement.geometry = cubeTitleGeometry;
+        }
+    }
+
     private texture: Texture;
+    private cubeTitleElement: Mesh;
+    private cubeTitleSize: number = 0.065;
+    private fontData: string;
 
     constructor(
         private dataProviderService: DataProviderService,
@@ -37,8 +48,8 @@ export class CubeComponent extends Object3dComponent implements OnInit {
 
     private async createComponent(): Promise<void> {
 
-        const fontUrl = 'assets/fonts/helvetiker_regular.typeface.json';
-        const fontData = await this.dataProviderService.getAwait<string>(fontUrl);
+        const fontUrl = 'assets/fonts/arial_regular.typeface.json';
+        this.fontData = await this.dataProviderService.getAwait<string>(fontUrl);
         const cubeDataUrl = 'assets/data/cube/cube.json';
         const cubeData = await this.dataProviderService.getAwait<string>(cubeDataUrl) as any;
         const textsMaterial = new MeshBasicMaterial({color: 'white'});
@@ -86,12 +97,12 @@ export class CubeComponent extends Object3dComponent implements OnInit {
             const plankTextShift = -0.3;
             const plankValueShift = -0.15;
             const plankZ = -0.5 + (0.7 + i) / cubePartsCount;
-            const plankTextGeometry = this.getTextGeometry(plankText, fontData, plankSize, Anchor.LowerRight);
+            const plankTextGeometry = this.getTextGeometry(plankText, this.fontData, plankSize, Anchor.LowerRight);
             const plankTextElement = new Mesh(plankTextGeometry, textsMaterial);
             plankTextElement.translateX(plankTextShift);
             plankGroup.add(plankTextElement);
             const plankValue = cubePart.Value;
-            const plankValueGeometry = this.getTextGeometry(plankValue, fontData, plankSize, Anchor.LowerCenter);
+            const plankValueGeometry = this.getTextGeometry(plankValue, this.fontData, plankSize, Anchor.LowerCenter);
             const plankValueElement = new Mesh(plankValueGeometry, textsMaterial);
             plankValueElement.translateX(plankValueShift);
             plankGroup.add(plankValueElement);
@@ -167,24 +178,23 @@ export class CubeComponent extends Object3dComponent implements OnInit {
         const ratesValueSize = 0.05;
         const percentValueSize = 0.12;
         const ratTextsSize = 0.05;
-        const cubeTitleSize = 0.065;
         const rateValuesGroup = new Group();
-        const ratesTitleGeometry = this.getTextGeometry(ratesTitle, fontData, ratesTitleSize, Anchor.LowerCenter);
+        const ratesTitleGeometry = this.getTextGeometry(ratesTitle, this.fontData, ratesTitleSize, Anchor.LowerCenter);
         const ratesTitleElement = new Mesh(ratesTitleGeometry, textsMaterial);
         let elevation = partsHeight + ratesThickness;
         ratesTitleElement.translateY(elevation + ratesTitleSize * 0.5);
         rateValuesGroup.add(ratesTitleElement);
-        const leftRateValueGeometry = this.getTextGeometry(leftRateValue, fontData, ratesValueSize, Anchor.LowerLeft);
+        const leftRateValueGeometry = this.getTextGeometry(leftRateValue, this.fontData, ratesValueSize, Anchor.LowerLeft);
         const leftRateValueElement = new Mesh(leftRateValueGeometry, textsMaterial);
-        const rightRateValueGeometry = this.getTextGeometry(rightRateValue, fontData, ratesValueSize, Anchor.LowerRight);
+        const rightRateValueGeometry = this.getTextGeometry(rightRateValue, this.fontData, ratesValueSize, Anchor.LowerRight);
         const rightRateValueElement = new Mesh(rightRateValueGeometry, textsMaterial);
         elevation += ratesValueSize * 0.2;
         leftRateValueElement.translateOnAxis(new Vector3(-0.45, elevation, 0), 1);
         rightRateValueElement.translateOnAxis(new Vector3(0.45, elevation, 0), 1);
         rateValuesGroup.add(rightRateValueElement);
         rateValuesGroup.add(leftRateValueElement);
-        const leftPercentGeometry = this.getTextGeometry(`${leftPercentValue} %`, fontData, percentValueSize, Anchor.LowerCenter);
-        const rightPercentGeometry = this.getTextGeometry(`${rightPercentValue} %`, fontData, percentValueSize, Anchor.LowerCenter);
+        const leftPercentGeometry = this.getTextGeometry(`${leftPercentValue} %`, this.fontData, percentValueSize, Anchor.LowerCenter);
+        const rightPercentGeometry = this.getTextGeometry(`${rightPercentValue} %`, this.fontData, percentValueSize, Anchor.LowerCenter);
         const leftPercentElement = new Mesh(leftPercentGeometry, textsMaterial);
         const rightPercentElement = new Mesh(rightPercentGeometry, textsMaterial);
         elevation += percentValueSize * 0.8;
@@ -192,8 +202,8 @@ export class CubeComponent extends Object3dComponent implements OnInit {
         rightPercentElement.translateOnAxis(new Vector3(0.25, elevation, 0), 1);
         rateValuesGroup.add(leftPercentElement);
         rateValuesGroup.add(rightPercentElement);
-        const leftTextGeometry = this.getTextGeometry(leftText, fontData, ratTextsSize, Anchor.LowerCenter);
-        const rightTextGeometry = this.getTextGeometry(rightText, fontData, ratTextsSize, Anchor.LowerCenter);
+        const leftTextGeometry = this.getTextGeometry(leftText, this.fontData, ratTextsSize, Anchor.LowerCenter);
+        const rightTextGeometry = this.getTextGeometry(rightText, this.fontData, ratTextsSize, Anchor.LowerCenter);
         const leftTextElement = new Mesh(leftTextGeometry, textsMaterial);
         const rightTextElement = new Mesh(rightTextGeometry, textsMaterial);
         elevation += ratTextsSize * 4;
@@ -210,11 +220,11 @@ export class CubeComponent extends Object3dComponent implements OnInit {
         rightTextBackElement.translateOnAxis(new Vector3(0.25, elevation + 0.025, -0.005), 1);
         rateValuesGroup.add(leftTextBackElement);
         rateValuesGroup.add(rightTextBackElement);
-        const cubeTitleGeometry = this.getTextGeometry(cubeTitle, fontData, cubeTitleSize, Anchor.LowerCenter);
-        const cubeTitleElement = new Mesh(cubeTitleGeometry, textsMaterial);
-        elevation += cubeTitleSize * 1.5;
-        cubeTitleElement.translateY(elevation);
-        rateValuesGroup.add(cubeTitleElement);
+        const cubeTitleGeometry = this.getTextGeometry(cubeTitle, this.fontData, this.cubeTitleSize, Anchor.LowerCenter);
+        this.cubeTitleElement = new Mesh(cubeTitleGeometry, textsMaterial);
+        elevation += this.cubeTitleSize * 1.5;
+        this.cubeTitleElement.translateY(elevation);
+        rateValuesGroup.add(this.cubeTitleElement);
         rateValuesGroup.translateZ(-0.5);
         this.Group.add(rateValuesGroup);
     }

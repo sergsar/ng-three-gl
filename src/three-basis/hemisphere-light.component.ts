@@ -15,7 +15,7 @@ export class HemisphereLightComponent extends Object3dComponent {
   constructor(groupProvider: GroupProvider) {
     super(groupProvider);
 
-    const hemisphereLight = new HemisphereLight(0x808080, 0x404040);
+    const hemisphereLight = new HemisphereLight(0x222222, 0x111111);
 
     this.Group.add(hemisphereLight);
   }

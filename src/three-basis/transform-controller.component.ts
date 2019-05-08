@@ -1,90 +1,122 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Camera, Event, Object3D, Scene } from 'three';
-import { RendererComponent } from './renderer.component';
+// tslint:disable: no-duplicate-imports no-import-side-effect ordered-imports
+
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Unsubscribable } from 'rxjs';
+import { Camera, Event, Object3D, PerspectiveCamera, Scene } from 'three';
 import { CanvasControllerComponent } from './canvas-controller.component';
+import { RendererComponent } from './renderer.component';
 import { SceneComponent } from './scene.component';
 
-declare var require: any;
-const THREE = require('three');
-const TransformControls = require('three-transform-controls')(THREE);
+import * as THREE from 'three';
+import '../assets/js/three/EnableThreeExamples';
+import '../assets/js/three/controls/TransformControls';
 
 @Component({ selector: 'three-transform-controller', template: '' })
-export class TransformControllerComponent implements OnInit, OnChanges, OnDestroy {
+export class TransformControllerComponent implements OnInit, OnDestroy {
     @Input()
     public controllable: Object3D;
 
     @Input()
-    public mode: string;
+    public set mode(value: string) {
+        this.setTransformMode(value || 'translate');
+    }
 
     @Input()
-    public visible: boolean;
+    public set visible(value: boolean) {
+        this.setEnabled(value || false);
+    }
 
     @Output()
     public readonly positionChanged: EventEmitter<any> = new EventEmitter();
 
+    @Output()
+    public readonly rotationChanged: EventEmitter<any> = new EventEmitter();
+
+    @Output()
+    public readonly scaleChanged: EventEmitter<any> = new EventEmitter();
+
+    private get camera(): Camera {
+        return this.rendererComponent.getActiveCamera();
+    }
+
     private controls: THREE.TransformControls;
-    private blockedControls: Object[] = [];
     private readonly scene: Scene;
     private readonly canvas: HTMLCanvasElement;
-    private readonly camera: Camera;
+    private changeCameraSubscription: Unsubscribable;
 
-    constructor(canvasControllerComponent: CanvasControllerComponent, rendererComponent: RendererComponent, sceneComponent: SceneComponent) {
+    constructor(canvasControllerComponent: CanvasControllerComponent,
+                private rendererComponent: RendererComponent,
+                sceneComponent: SceneComponent) {
         this.scene = sceneComponent.getScene();
         this.canvas = canvasControllerComponent.Canvas;
-        this.camera = rendererComponent.getCamera();
     }
 
     public ngOnInit(): void {
+        this.createControls();
 
-        this.controls = new TransformControls(this.camera, this.canvas);
-        this.controls.attach(this.controllable);
+        this.changeCameraSubscription = this.rendererComponent.ChangeCamera.subscribe(this.onChangeCamera);
+    }
+
+    public ngOnDestroy(): void {
+        this.scene.remove(this.controls);
+        this.changeCameraSubscription.unsubscribe();
+    }
+
+    private createControls(): void {
+        if(!this.camera) {
+            return;
+        }
+        this.controls = new THREE.TransformControls(this.camera, this.canvas);
 
         this.scene.add(this.controls);
 
         this.controls.addEventListener('objectChange', (e) => this.emit(e));
 
-        const wrapper = this.scene.getObjectByName('orbit-controls');
-
-        const orbitControls = wrapper && wrapper.userData;
-
-        this.blockedControls.push(orbitControls);
-
         this.controls.addEventListener('objectChange', (e) => this.setEnabledBlockedControls(false));
         this.controls.addEventListener('mouseUp', (e) => this.setEnabledBlockedControls(true));
-
-        this.controls.visible = false;
     }
 
-    public ngOnChanges(changes: SimpleChanges): void {
-        for (const propName of Object.keys(changes)) {
-            const change = changes[propName];
-            this[propName] = change.currentValue;
+    private onChangeCamera = (camera: PerspectiveCamera) => {
+        if(!this.controls) {
+            this.createControls();
         }
-        this.setTransformMode();
-        this.setEnabled();
-    }
-
-    public ngOnDestroy(): void {
-        this.scene.remove(this.controls);
+        this.controls[('camera')] = camera;
     }
 
     private emit(e: Event): void {
-        this.positionChanged.emit([this.controllable.position.x, this.controllable.position.y, this.controllable.position.z]);
+
+        this.positionChanged.emit({
+            x: this.controllable.position.x,
+            y: this.controllable.position.y,
+            z: this.controllable.position.z });
+        this.rotationChanged.emit({
+            x: this.controllable.rotation.x * 180.0 / Math.PI,
+            y: this.controllable.rotation.y * 180.0 / Math.PI,
+            z: this.controllable.rotation.z * 180.0 / Math.PI });
+        this.scaleChanged.emit({
+            x: this.controllable.scale.x,
+            y: this.controllable.scale.y,
+            z: this.controllable.scale.z });
     }
 
-    private setTransformMode() : void {
+    private setTransformMode(value: string) : void {
         if(this.controls) {
-            this.controls.setMode(this.mode || 'translate');
+            this.controls.setMode(value);
         }
     }
 
-    private setEnabled() : void {
+    private setEnabled(value: boolean) : void {
         if(this.controls) {
-            this.controls.visible = this.visible;
+            if(value) {
+                this.controls.attach(this.controllable);
+            } else {
+                this.controls.detach();
+            }
         }
     }
 
     private setEnabledBlockedControls(value: boolean) : void {
-        this.blockedControls.forEach(p => p[('enabled')] = value);
+        const blockedControls = this.scene.children.filter(o => o.name === 'orbit-controls').map(o => o.userData);
+        blockedControls.forEach(p => p[('enabled')] = value);
     }
 }

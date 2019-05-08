@@ -12,17 +12,29 @@
     <div><a href="https://github.com/sergsar/ng-three-gl">https://github.com/sergsar/ng-three-gl</a></div>
   </div>
   <canvas></canvas>
-  <three-canvas-controller [width]="Width" [height]="Height">
-    <three-renderer [width]="Width" [height]="Height">
+  <three-canvas-controller
+    [width]="Width"
+    [height]="Height">
+    <three-renderer [Shadows]="true" >
       <three-scene [backgroundColor]="'0 0 0'" #owner>
         <three-grid-helper [parent]="owner['scene']" [visible]="true"></three-grid-helper>
-        <three-perspective-camera #controllable>
+        <three-perspective-camera
+          [positionX]="-0.4"
+          [positionY]="1"
+          [positionZ]="1"
+          #controllable #camera>
           <three-orbit-controller
             [controllable]="controllable['object']"
+            [camera]="camera['object']"
           ></three-orbit-controller>
         </three-perspective-camera>
         <three-hemisphere-light></three-hemisphere-light>
-        <three-direct-light></three-direct-light>
+        <three-ambient-light></three-ambient-light>
+        <three-direct-light
+          [CastShadow]="true"
+          [Helper]="false"
+          [Intensity]="0.35">
+        </three-direct-light>
         <three-cube></three-cube>
       </three-scene>
     </three-renderer>

@@ -9,17 +9,19 @@ export class GridHelperComponent implements OnInit {
 
     @Input()
     public set visible(value: boolean) {
-        console.log(value);
+        this.gridVisible = value;
         if(this.gridObject) {
             this.gridObject.visible = value;
         }
     }
 
     private gridObject: Object3D;
+    private gridVisible: boolean;
 
     public ngOnInit(): void {
         if(this.parent) {
             this.gridObject = new GridHelper(2, 10);
+            this.gridObject.visible = this.gridVisible;
             this.parent.add(this.gridObject);
         }
     }
